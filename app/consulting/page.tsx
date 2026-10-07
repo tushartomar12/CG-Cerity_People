@@ -39,7 +39,7 @@ export default function ConsultingPage() {
       <section className="py-16 sm:py-24">
         <div className="container">
           <SectionHeading
-            title="Consulting services"
+            title="Simplified HR Solutions"
             description="Engagements tailored for HR leaders, founders, finance teams, and growing organizations."
           />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

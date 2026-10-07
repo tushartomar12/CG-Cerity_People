@@ -1,20 +1,16 @@
 import { CheckCircle2 } from "lucide-react";
 import { ButtonLink } from "./ButtonLink";
 
-const defaultBullets = [
-  "Free discovery call with HR specialists",
-  "Tailored HRMS or consulting roadmap",
-  "No obligation — practical recommendations",
-];
+
 
 export function CTASection({
   title,
   description,
   buttonLabel = "Book a Consultation",
   buttonHref = "/contact",
-  secondaryLabel = "Explore HR Technology",
+ 
   secondaryHref = "/hr-tech",
-  bullets = defaultBullets,
+ 
 }: {
   title: string;
   description: string;
@@ -46,12 +42,7 @@ export function CTASection({
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-slate-300">{description}</p>
               <ul className="mt-8 hidden space-y-3 text-left sm:block">
-                {bullets.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-slate-200">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden />
-                    {item}
-                  </li>
-                ))}
+               
               </ul>
             </div>
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:flex-col lg:items-stretch">
@@ -62,16 +53,8 @@ export function CTASection({
               >
                 {buttonLabel}
               </ButtonLink>
-              <ButtonLink
-                href={secondaryHref}
-                variant="outline"
-                className="w-full border-white/20 bg-white/10 text-white hover:border-white/40 hover:bg-white/15 sm:w-auto lg:w-full"
-              >
-                {secondaryLabel}
-              </ButtonLink>
-              <p className="text-center text-xs text-slate-400 lg:text-left">
-                Typical response within 1 business day
-              </p>
+             
+             
             </div>
           </div>
         </div>

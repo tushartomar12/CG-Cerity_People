@@ -49,10 +49,10 @@ export default function HrTechPage() {
         </div>
       </section>
 
-      <section className="py-16 sm:py-24">
+      <section className="py-16 sm:py-24"> 
         <div className="container">
           <SectionHeading
-            eyebrow="HRMS Modules"
+            eyebrow="HRMS Modules" 
             title="Everything you need in one HR management system"
             description="Modular capabilities you can deploy together or in phases — configured to your policies and workflows."
           />

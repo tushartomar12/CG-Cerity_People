@@ -185,57 +185,7 @@ export const hrmsModulesDetailed = [
     title: "Background Verification",
     description: "Manage BGV workflows, documents, verification levels and status.",
   },
-  {
-    title: "Employee Onboarding",
-    description: "Automate onboarding workflows and documentation.",
-  },
-  {
-    title: "Attendance Management",
-    description: "Track employee attendance and working hours.",
-  },
-  {
-    title: "Biometric Integration",
-    description: "Integrate biometric devices with HR systems.",
-  },
-  {
-    title: "Shift Management",
-    description: "Create shifts, schedules, grace periods and working rules.",
-  },
-  {
-    title: "Leave Management",
-    description: "Manage leave policies, balances, approvals and holidays.",
-  },
-  {
-    title: "Timesheet Management",
-    description: "Track employee working hours and project time.",
-  },
-  {
-    title: "Payroll",
-    description:
-      "Automate salary calculations, deductions, payroll processing and payslips.",
-  },
-  {
-    title: "Performance Management",
-    description: "Manage goals, reviews, KPIs and employee performance.",
-  },
-  {
-    title: "Expense Management",
-    description: "Manage employee expenses and approvals.",
-  },
-  {
-    title: "Asset Management",
-    description: "Track company assets assigned to employees.",
-  },
-  {
-    title: "Employee Self-Service",
-    description:
-      "Profile, leave, attendance, timesheets, documents, payslips, and expenses in one portal.",
-  },
-  {
-    title: "HR Analytics",
-    description:
-      "Dashboards for headcount, attendance, attrition, payroll, recruitment, leave, and performance.",
-  },
+ 
 ];
 
 export const consultingServicesDetailed = [
@@ -263,18 +213,7 @@ export const consultingServicesDetailed = [
     title: "Performance Management",
     description: "Design goal-setting and performance review frameworks.",
   },
-  {
-    title: "HR Digital Transformation",
-    description: "Move manual HR processes to automated digital workflows.",
-  },
-  {
-    title: "Policy & Process Design",
-    description: "Develop HR policies, SOPs and employee processes.",
-  },
-  {
-    title: "Organization Design",
-    description: "Create scalable organizational structures and roles.",
-  },
+  
 ];
 
 export const solutionsByNeed = [

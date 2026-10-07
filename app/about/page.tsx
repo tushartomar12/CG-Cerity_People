@@ -64,23 +64,102 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-slate-50 py-16 sm:py-20">
-        <div className="container">
-          <SectionHeading title="Our Approach" description="A proven delivery model from discovery to continuous improvement." />
-          <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {approachSteps.map((step) => (
-              <li
-                key={step.title}
-                className="relative rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm"
-              >
-                <span className="text-sm font-bold text-accent">{step.step}</span>
-                <h3 className="mt-2 text-lg font-semibold text-navy">{step.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{step.description}</p>
-              </li>
-            ))}
-          </ol>
+     {/* =========================================================
+    LEADERSHIP & TEAM
+========================================================= */}
+<section className="bg-slate-50 py-16 sm:py-20">
+  <div className="container">
+
+    <SectionHeading
+      title="Leadership & Team"
+      description="Experienced practitioners across HR technology and consulting."
+    />
+
+    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      {/* =====================================================
+          ROHIT LOHIA
+      ===================================================== */}
+      <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+        <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+          <img
+            src="/rohit.webp"
+            alt="Rohit Lohia"
+            className="h-full w-full object-cover"
+          />
         </div>
-      </section>
+
+        <div className="p-5">
+          <h3 className="font-semibold text-navy">
+            Rohit Lohia
+          </h3>
+
+          <p className="text-sm font-medium text-accent">
+            Chief Executive Officer
+          </p>
+
+          <p className="mt-2 text-sm text-slate-600">
+            15+ years leading HR transformation programs for global enterprises.
+          </p>
+        </div>
+      </article>
+
+
+      {/* =====================================================
+          INDU WADHWA
+      ===================================================== */}
+      <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+        <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+          <img
+            src="/indu.webp"
+            alt="Indu Wadhwa"
+            className="h-full w-full object-cover"
+          />
+        </div>
+
+        <div className="p-5">
+          <h3 className="font-semibold text-navy">
+            Indu Wadhwa
+          </h3>
+
+          <p className="text-sm font-medium text-accent">
+            HR & Consulting Leader
+          </p>
+
+          <p className="mt-2 text-sm text-slate-600">
+            Experienced practitioner across HR technology, consulting, and workforce strategy.
+          </p>
+        </div>
+      </article>
+
+
+      {/* =====================================================
+          PALLAVI
+      ===================================================== */}
+      <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+        <div
+          className="aspect-[4/3] bg-gradient-to-br from-slate-200 to-slate-300"
+          aria-hidden
+        />
+
+        <div className="p-5">
+          <h3 className="font-semibold text-navy">
+            Pallavi
+          </h3>
+
+          <p className="text-sm font-medium text-accent">
+            HR & Consulting Leader
+          </p>
+
+          <p className="mt-2 text-sm text-slate-600">
+            Experienced practitioner across HR technology, consulting, and workforce strategy.
+          </p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
 
       <section className="py-16 sm:py-20">
         <div className="container">
@@ -99,24 +178,21 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-slate-50 py-16 sm:py-20">
+     <section className="bg-slate-50 py-16 sm:py-20">
         <div className="container">
-          <SectionHeading title="Leadership & Team" description="Experienced practitioners across HR technology and consulting." />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {teamMembers.map((member) => (
-              <article
-                key={member.name}
-                className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm"
+          <SectionHeading title="Our Approach" description="A proven delivery model from discovery to continuous improvement." />
+          <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {approachSteps.map((step) => (
+              <li
+                key={step.title}
+                className="relative rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm"
               >
-                <div className="aspect-[4/3] bg-gradient-to-br from-slate-200 to-slate-300" aria-hidden />
-                <div className="p-5">
-                  <h3 className="font-semibold text-navy">{member.name}</h3>
-                  <p className="text-sm font-medium text-accent">{member.role}</p>
-                  <p className="mt-2 text-sm text-slate-600">{member.bio}</p>
-                </div>
-              </article>
+                <span className="text-sm font-bold text-accent">{step.step}</span>
+                <h3 className="mt-2 text-lg font-semibold text-navy">{step.title}</h3>
+                <p className="mt-2 text-sm text-slate-600">{step.description}</p>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
