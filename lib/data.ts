@@ -8,6 +8,7 @@ export type BlogPost = {
   imageGradient: string;
 };
 
+
 export const trustLogos = [
   "Northline Group",
   "Apex Retail",
