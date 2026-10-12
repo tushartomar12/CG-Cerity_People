@@ -278,7 +278,7 @@ export const blogPosts: BlogPost[] = [
     category: "HR Technology",
     date: "2026-02-18",
     readMinutes: 7,
-    imageGradient: "from-blue-600 to-slate-800",
+    imageGradient: "from-primary to-navy-deep",
   },
   {
     slug: "complete-guide-to-hrms",
@@ -288,7 +288,7 @@ export const blogPosts: BlogPost[] = [
     category: "HR Technology",
     date: "2026-02-05",
     readMinutes: 12,
-    imageGradient: "from-slate-700 to-blue-900",
+    imageGradient: "from-navy-deep to-primary",
   },
   {
     slug: "how-to-digitize-employee-onboarding",
@@ -298,7 +298,7 @@ export const blogPosts: BlogPost[] = [
     category: "Employee Management",
     date: "2026-01-22",
     readMinutes: 8,
-    imageGradient: "from-teal-600 to-slate-800",
+    imageGradient: "from-primary to-navy-deep",
   },
   {
     slug: "payroll-automation-benefits-and-challenges",
@@ -308,7 +308,7 @@ export const blogPosts: BlogPost[] = [
     category: "Payroll",
     date: "2026-01-10",
     readMinutes: 9,
-    imageGradient: "from-indigo-600 to-slate-900",
+    imageGradient: "from-navy-deep to-primary",
   },
   {
     slug: "hr-compliance-checklist-for-growing-businesses",
@@ -318,7 +318,7 @@ export const blogPosts: BlogPost[] = [
     category: "HR Compliance",
     date: "2025-12-15",
     readMinutes: 10,
-    imageGradient: "from-slate-600 to-blue-800",
+    imageGradient: "from-navy-deep to-brand",
   },
   {
     slug: "building-a-modern-recruitment-workflow",
@@ -328,7 +328,7 @@ export const blogPosts: BlogPost[] = [
     category: "Recruitment",
     date: "2025-12-01",
     readMinutes: 6,
-    imageGradient: "from-blue-500 to-teal-800",
+    imageGradient: "from-primary to-navy-deep",
   },
   {
     slug: "workforce-planning-for-scale-ups",
@@ -338,7 +338,7 @@ export const blogPosts: BlogPost[] = [
     category: "Workforce Management",
     date: "2025-11-20",
     readMinutes: 8,
-    imageGradient: "from-slate-800 to-teal-700",
+    imageGradient: "from-navy-deep to-primary",
   },
   {
     slug: "hr-trends-2026",
@@ -348,7 +348,7 @@ export const blogPosts: BlogPost[] = [
     category: "HR Trends",
     date: "2025-11-08",
     readMinutes: 5,
-    imageGradient: "from-violet-600 to-slate-900",
+    imageGradient: "from-navy to-primary",
   },
 ];
 

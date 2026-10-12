@@ -24,7 +24,7 @@ export function DashboardPreview({
       )}
       aria-hidden
     >
-      <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50 px-4 py-3">
+      <div className="flex items-center gap-2 border-b border-[rgba(8,32,56,0.08)] bg-soft-white px-4 py-3">
         <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
@@ -65,7 +65,7 @@ export function DashboardPreview({
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-xl border border-slate-100 bg-slate-50/80 p-3"
+                className="rounded-xl border border-[rgba(8,32,56,0.08)] bg-soft-white/80 p-3"
               >
                 <p className="text-[11px] font-medium text-slate-500">{stat.label}</p>
                 <p className="mt-1 text-lg font-bold text-navy">{stat.value}</p>

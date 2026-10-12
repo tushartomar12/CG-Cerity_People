@@ -1,60 +1,31 @@
-import { CerityLogoMark } from "@/components/CerityLogoMark";
-import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
-/** Shared logo + wordmark — used in header and flying transition clone */
+const LOGO_SRC = "/cerity-logo.png";
+
+/** Official CerityPeople lockup — used in header, footer, and splash. */
 export function LogoBrand({
   layout = "header",
-  markSize = 38,
-  markAnimated = false,
-  showTagline = true,
+  inverted = false,
   className,
 }: {
   layout?: "header" | "splash";
   markSize?: number;
   markAnimated?: boolean | "intro" | "nav";
   showTagline?: boolean;
+  inverted?: boolean;
   className?: string;
 }) {
   const isSplash = layout === "splash";
 
   return (
-    <div
+    <img
+      src={inverted ? "/cerity-logo-contact.png" : LOGO_SRC}
+      alt="CerityPeople"
       className={cn(
-        "flex items-center",
-        isSplash ? "flex-col gap-5 text-center" : "gap-2.5",
+        "h-auto object-contain",
+        isSplash ? "w-[min(28rem,82vw)]" : "h-12 w-auto max-w-[230px] sm:h-[3.25rem] sm:max-w-[270px]",
         className,
       )}
-    >
-      <span
-        className={cn(
-          "relative flex shrink-0 items-center justify-center",
-          !isSplash && "h-[38px] w-[38px]",
-        )}
-      >
-        <CerityLogoMark size={markSize} animated={markAnimated} />
-      </span>
-      <span className={cn("flex flex-col leading-tight", isSplash && "items-center")}>
-        <span
-          className={cn(
-            "flex items-baseline gap-1 font-semibold tracking-tight",
-            isSplash ? "text-4xl sm:text-5xl" : "text-base",
-          )}
-        >
-          <span className="text-navy">Cerity</span>
-          <span className="text-accent">People</span>
-        </span>
-        {showTagline ? (
-          <span
-            className={cn(
-              "font-medium text-slate-500",
-              isSplash ? "mt-1 max-w-xs text-sm sm:text-base" : "hidden text-[11px] sm:block",
-            )}
-          >
-            {siteConfig.tagline}
-          </span>
-        ) : null}
-      </span>
-    </div>
+    />
   );
 }

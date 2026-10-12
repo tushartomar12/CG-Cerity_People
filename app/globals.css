@@ -1,30 +1,133 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --navy: #0f2744;
-  --brand: #1d4ed8;
-  --accent: #0d9488;
+  --cp-primary: #1677e8;
+  --cp-primary-hover: #125fba;
+  --cp-gold: #f59e0b;
+  --cp-gold-hover: #d97706;
+  --cp-gold-light: #fde68a;
+  --cp-cream: #fffbeb;
+  --cp-navy: #102840;
+  --cp-dark-blue: #082038;
+  --cp-white: #ffffff;
+  --cp-soft-white: #f8f8f8;
+
+  --color-primary: var(--cp-primary);
+  --color-gold: var(--cp-gold);
+  --color-gold-light: var(--cp-gold-light);
+  --color-cream: var(--cp-cream);
+  --color-navy: var(--cp-navy);
+  --color-dark-blue: var(--cp-dark-blue);
+  --color-white: var(--cp-white);
+  --color-soft-white: var(--cp-soft-white);
+
+  --background: var(--cp-white);
+  --foreground: var(--cp-dark-blue);
+  --navy: var(--cp-dark-blue);
+  --brand: var(--cp-primary);
+  --accent: var(--cp-gold);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-navy: var(--navy);
+  --color-navy-deep: var(--cp-navy);
   --color-brand: var(--brand);
   --color-accent: var(--accent);
-  --font-sans: var(--font-inter);
+  --color-primary: var(--cp-primary);
+  --color-primary-hover: var(--cp-primary-hover);
+  --color-gold: var(--cp-gold);
+  --color-gold-hover: var(--cp-gold-hover);
+  --color-gold-light: var(--cp-gold-light);
+  --color-cream: var(--cp-cream);
+  --color-dark-blue: var(--cp-dark-blue);
+  --color-white: var(--cp-white);
+  --color-soft-white: var(--cp-soft-white);
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-dm-serif);
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--cp-white);
+  background-image: url("/brand-background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-dm-serif), ui-serif, Georgia, serif;
+}
+
+@media (min-width: 768px) {
+  body {
+    background-attachment: fixed;
+  }
+}
+
+body.home-page,
+body.hr-tech-page,
+body.consulting-page,
+body.about-page,
+body.solutions-page,
+body.contact-page {
+  background-image: none;
+}
+
+body.contact-page {
+  background-color: #082038;
+}
+
+.brand-grid {
+  background-size: 88px 88px;
+}
+
+@media (max-width: 1023px) {
+  .brand-grid {
+    background-size: 60px 60px;
+  }
+}
+
+@media (max-width: 639px) {
+  .brand-grid {
+    opacity: 0.4;
+    background-size: 44px 44px !important;
+  }
+
+  .brand-motif-secondary {
+    display: none;
+  }
+}
+
+@keyframes brand-arc-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(10px, -8px, 0);
+  }
+}
+
+.brand-arc-drift {
+  animation: brand-arc-drift 18s ease-in-out infinite;
+}
+
+.brand-arc-drift-slow {
+  animation: brand-arc-drift 22s ease-in-out infinite reverse;
 }
 
 .container {
@@ -44,6 +147,14 @@ body {
   .container {
     padding-inline: 2rem;
   }
+}
+
+.btn-gradient {
+  background-image: linear-gradient(90deg, var(--cp-primary) 0%, var(--cp-gold) 100%);
+}
+
+.btn-gradient:hover {
+  background-image: linear-gradient(90deg, var(--cp-primary-hover) 0%, var(--cp-gold-hover) 100%);
 }
 
 .section-padding {
@@ -405,7 +516,7 @@ body {
   animation: logo-morph-flash 0.9s ease-out forwards;
   background: radial-gradient(
     circle at 30% 20%,
-    rgb(13 148 136 / 0.15),
+    rgb(245 158 11 / 0.12),
     transparent 50%
   );
 }
@@ -448,7 +559,9 @@ body {
   .animate-logo-bg-drift,
   .animate-logo-bg-drift-reverse,
   .animate-logo-morph-flash,
-  .animate-logo-header-land {
+  .animate-logo-header-land,
+  .brand-arc-drift,
+  .brand-arc-drift-slow {
     animation: none !important;
   }
 

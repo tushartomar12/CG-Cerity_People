@@ -30,7 +30,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
         </div>
         <Link
           href={`/insights/${post.slug}`}
-          className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent"
+          className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand"
         >
           Read More
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

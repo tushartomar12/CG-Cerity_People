@@ -46,12 +46,12 @@ export function MobileMenu({
         </div>
         <nav className="flex-1 overflow-y-auto px-5 py-6">
           <ul className="space-y-1">
-            {navLinks.map((link) => (
+            {navLinks.filter((link) => !link.navHidden).map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   onClick={onClose}
-                  className="block rounded-lg px-3 py-3 text-base font-medium text-slate-700 hover:bg-slate-50 hover:text-navy"
+                  className="block rounded-full px-3 py-3 text-base font-medium text-navy hover:bg-cream"
                 >
                   {link.label}
                 </Link>
@@ -60,7 +60,7 @@ export function MobileMenu({
           </ul>
         </nav>
         <div className="border-t border-slate-100 p-5">
-          <ButtonLink href="/contact" className="w-full" onClick={onClose}>
+          <ButtonLink href="/contact" variant="accent" className="w-full" onClick={onClose}>
             Book a Consultation
           </ButtonLink>
         </div>

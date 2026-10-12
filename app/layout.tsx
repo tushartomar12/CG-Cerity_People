@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LogoTransitionProvider } from "@/components/LogoTransitionContext";
@@ -8,9 +8,17 @@ import { siteConfig } from "@/lib/site-config";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 import "./globals.css";
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-dm-serif",
   display: "swap",
 });
 
@@ -25,8 +33,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} h-full scroll-smooth`}>
-      <body className="flex min-h-full flex-col antialiased text-slate-800">
+    <html
+      lang="en"
+      className={`${dmSans.variable} ${dmSerifDisplay.variable} h-full scroll-smooth`}
+    >
+      <body className="flex min-h-full flex-col font-sans antialiased text-navy-deep">
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <LogoTransitionProvider>
           <Header />

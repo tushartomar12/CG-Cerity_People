@@ -46,7 +46,7 @@ export default async function InsightArticlePage({ params }: Props) {
           { label: post.title },
         ]}
       />
-      <article className="pb-8">
+      <article className="relative overflow-hidden pb-8">
         <header className="container max-w-3xl py-8">
           <p className="text-sm font-semibold uppercase tracking-wider text-accent">
             {post.category}
@@ -87,7 +87,7 @@ export default async function InsightArticlePage({ params }: Props) {
         <div className="container max-w-3xl py-8">
           <Link
             href="/insights"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-accent"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-brand"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Back to insights

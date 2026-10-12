@@ -1,7 +1,10 @@
+import { Suspense } from "react";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { BrandBackground } from "@/components/BrandBackground";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/components/HeroSection";
+import { HomePageClass } from "@/components/HomePageClass";
 import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/lib/site-config";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
@@ -17,57 +20,66 @@ export const metadata = buildMetadata({
 export default function ContactPage() {
   return (
     <>
+      <HomePageClass name="contact-page" />
       <JsonLd
         data={breadcrumbSchema([
           { name: "Home", path: "/" },
           { name: "Contact", path: "/contact" },
         ])}
       />
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
+      <div className="relative overflow-hidden">
+        <BrandBackground variant="contactPage" />
+      <Breadcrumb
+        inverted
+        items={[{ label: "Home", href: "/" }, { label: "Contact" }]}
+      />
       <HeroSection
+        inverted
         title="Let's Talk About Your HR Challenges"
         description="Tell us about your HR requirements and our experts will help you identify the right technology or consulting solution."
         size="compact"
       />
 
-      <section className="pb-20">
-        <div className="container grid gap-12 lg:grid-cols-5">
+      <section className="relative overflow-hidden pb-20">
+        <div className="container relative grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <ContactForm />
+            <Suspense fallback={<div className="min-h-[24rem] rounded-2xl bg-white/10" />}>
+              <ContactForm />
+            </Suspense>
           </div>
           <aside className="lg:col-span-2 lg:space-y-6">
-            <div className="rounded-2xl bg-navy p-6 text-white shadow-lg shadow-navy/20">
-              <h2 className="text-lg font-semibold">Why book a consultation?</h2>
-              <ul className="mt-4 space-y-2 text-sm text-slate-300">
-                <li>• HRMS fit assessment for your size & industry</li>
-                <li>• Payroll & compliance gap review</li>
-                <li>• Clear next steps — no hard sell</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-navy">Get in touch</h2>
-              <ul className="mt-6 space-y-5 text-sm text-slate-600">
+            <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.08] p-6 shadow-[0_16px_50px_rgba(0,0,0,0.22)] backdrop-blur-xl">
+              <div
+                className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gold/20 blur-2xl"
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-primary/25 blur-2xl"
+                aria-hidden
+              />
+              <h2 className="relative text-lg font-semibold text-white">Get in touch</h2>
+              <ul className="relative mt-6 space-y-5 text-sm text-white/75">
                 <li className="flex gap-3">
-                  <Mail className="h-5 w-5 shrink-0 text-accent" aria-hidden />
-                  <a href={`mailto:${siteConfig.contact.email}`} className="hover:text-navy">
+                  <Mail className="h-5 w-5 shrink-0 text-gold" aria-hidden />
+                  <a href={`mailto:${siteConfig.contact.email}`} className="transition-colors hover:text-gold-light">
                     {siteConfig.contact.email}
                   </a>
                 </li>
                 <li className="flex gap-3">
-                  <Phone className="h-5 w-5 shrink-0 text-accent" aria-hidden />
+                  <Phone className="h-5 w-5 shrink-0 text-gold" aria-hidden />
                   <a
                     href={`tel:${siteConfig.contact.phone.replace(/\s/g, "")}`}
-                    className="hover:text-navy"
+                    className="transition-colors hover:text-gold-light"
                   >
                     {siteConfig.contact.phone}
                   </a>
                 </li>
                 <li className="flex gap-3">
-                  <MapPin className="h-5 w-5 shrink-0 text-accent" aria-hidden />
+                  <MapPin className="h-5 w-5 shrink-0 text-gold" aria-hidden />
                   <span>{siteConfig.contact.address}</span>
                 </li>
                 <li className="flex gap-3">
-                  <Clock className="h-5 w-5 shrink-0 text-accent" aria-hidden />
+                  <Clock className="h-5 w-5 shrink-0 text-gold" aria-hidden />
                   <span>{siteConfig.contact.businessHours}</span>
                 </li>
               </ul>
@@ -82,6 +94,7 @@ export default function ContactPage() {
           </aside>
         </div>
       </section>
+      </div>
     </>
   );
 }

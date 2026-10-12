@@ -1,10 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { LogoBrand } from "@/components/LogoBrand";
 import { cn } from "@/lib/utils";
+
+const emptySubscribe = () => () => {};
 
 const INTRO_MS = 1900;
 const NAV_INTRO_MS = 850;
@@ -23,10 +25,8 @@ export function LogoPageTransition({
 }) {
   const pathname = usePathname();
   const prevPath = useRef<string | null>(null);
-  const anchorRef = useRef(brandAnchor);
-  anchorRef.current = brandAnchor;
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
-  const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [phase, setPhase] = useState<Phase>("intro");
   const [splashVariant, setSplashVariant] = useState<"full" | "quick">("full");
@@ -39,10 +39,6 @@ export function LogoPageTransition({
     zIndex: 101,
   });
   const timers = useRef<number[]>([]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const clearTimers = () => {
     timers.current.forEach(clearTimeout);
@@ -71,7 +67,7 @@ export function LogoPageTransition({
       return;
     }
 
-    const anchor = anchorRef.current;
+    const anchor = brandAnchor;
     if (!anchor) return;
 
     setSplashVariant(isInitial ? "full" : "quick");
@@ -92,7 +88,7 @@ export function LogoPageTransition({
     const introMs = isInitial ? INTRO_MS : NAV_INTRO_MS;
 
     schedule(() => {
-      const target = anchorRef.current;
+      const target = brandAnchor;
       if (!target) {
         finish();
         return;
@@ -167,13 +163,13 @@ export function LogoPageTransition({
         aria-hidden
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="animate-logo-bg-drift absolute -left-24 top-[20%] h-80 w-80 rounded-full bg-blue-200/40 blur-3xl" />
-          <div className="animate-logo-bg-drift-reverse absolute -right-20 bottom-[18%] h-72 w-72 rounded-full bg-teal-200/35 blur-3xl" />
+          <div className="animate-logo-bg-drift absolute -left-24 top-[20%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
+          <div className="animate-logo-bg-drift-reverse absolute -right-20 bottom-[18%] h-72 w-72 rounded-full bg-gold-light/40 blur-3xl" />
         </div>
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.25]"
           style={{
-            backgroundImage: `radial-gradient(circle at center, rgb(29 78 216 / 0.12) 0%, transparent 55%)`,
+            backgroundImage: `radial-gradient(circle at center, rgb(22 119 232 / 0.12) 0%, transparent 55%)`,
           }}
         />
       </div>

@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "outline" | "ghost";
+type Variant = "primary" | "accent" | "secondary" | "outline" | "ghost";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-accent text-white shadow-md shadow-teal-900/15 hover:bg-teal-700 hover:shadow-lg focus-visible:ring-accent",
+    "bg-gradient-to-r from-primary to-accent text-white shadow-md shadow-[rgba(22,119,232,0.18)] hover:from-primary-hover hover:to-gold-hover hover:shadow-lg focus-visible:ring-primary",
+  accent:
+    "bg-accent text-white shadow-md shadow-[rgba(245,158,11,0.25)] hover:bg-gold-hover hover:shadow-lg focus-visible:ring-accent",
   secondary:
-    "bg-navy text-white shadow-md shadow-navy/20 hover:bg-slate-900 hover:shadow-lg focus-visible:ring-navy",
+    "bg-accent text-white shadow-md shadow-[rgba(245,158,11,0.25)] hover:bg-gold-hover hover:shadow-lg focus-visible:ring-accent",
   outline:
-    "border border-slate-200 bg-white text-navy shadow-sm hover:border-brand/30 hover:bg-blue-50/50 hover:shadow-md",
-  ghost: "text-navy hover:bg-slate-100",
+    "border-2 border-accent bg-white/90 text-navy shadow-sm hover:bg-cream hover:shadow-md focus-visible:ring-accent",
+  ghost: "text-navy hover:bg-cream hover:text-navy",
 };
 
 export function ButtonLink({
@@ -24,7 +26,7 @@ export function ButtonLink({
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        "inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
         variants[variant],
         className,
       )}

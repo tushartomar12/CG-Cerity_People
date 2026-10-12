@@ -15,11 +15,10 @@ export function buildMetadata({
   keywords = [],
 }: PageSeo): Metadata {
   const url = `${siteConfig.url}${path}`;
-  const fullTitle =
-    path === "/" ? `${title} | ${siteConfig.name}` : `${title} | ${siteConfig.name}`;
+  const fullTitle = `${title} | ${siteConfig.name}`;
 
   return {
-    title: fullTitle,
+    title: path === "/" ? { absolute: fullTitle } : title,
     description,
     keywords: keywords.join(", "),
     alternates: { canonical: url },
@@ -45,7 +44,7 @@ export function organizationSchema() {
     "@type": "Organization",
     name: siteConfig.legalName,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logo.svg`,
+    logo: `${siteConfig.url}/cerity-logo.png`,
     contactPoint: {
       "@type": "ContactPoint",
       telephone: siteConfig.contact.phone,

@@ -22,18 +22,23 @@ export const siteConfig = {
     youtube: "https://youtube.com/@ceritypeople",
   },
   colors: {
-    navy: "#0f2744",
-    blue: "#1d4ed8",
-    accent: "#0d9488",
+    primary: "#1677E8",
+    gold: "#F59E0B",
+    goldLight: "#FDE68A",
+    cream: "#FFFBEB",
+    navy: "#102840",
+    darkBlue: "#082038",
+    white: "#FFFFFF",
+    softWhite: "#F8F8F8",
   },
 } as const;
 
-export const navLinks = [
+export const navLinks: { href: string; label: string; navHidden?: boolean }[] = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/hr-tech", label: "HR Tech" },
   { href: "/consulting", label: "Consulting" },
   { href: "/solutions", label: "Solutions" },
-  { href: "/insights", label: "Insights" },
+  { href: "/insights", label: "Insights", navHidden: true },
   { href: "/contact", label: "Contact" },
-] as const;
+];

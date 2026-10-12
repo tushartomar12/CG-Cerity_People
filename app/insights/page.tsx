@@ -28,8 +28,8 @@ export default function InsightsPage() {
         description="Practical content for HR leaders and founders — structured for easy CMS or API integration later."
         size="compact"
       />
-      <section className="pb-20 pt-4">
-        <div className="container">
+      <section className="relative overflow-hidden pb-20 pt-4">
+        <div className="container relative">
           <InsightsExplorer posts={blogPosts} />
         </div>
       </section>

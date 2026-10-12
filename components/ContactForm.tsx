@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { companySizesForm, contactServices } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -16,16 +17,18 @@ type FormState = {
   message: string;
 };
 
-const initial: FormState = {
-  fullName: "",
-  email: "",
-  phone: "",
-  company: "",
-  companySize: "",
-  country: "",
-  service: "",
-  message: "",
-};
+function emptyForm(email = "", company = ""): FormState {
+  return {
+    fullName: "",
+    email,
+    phone: "",
+    company,
+    companySize: "",
+    country: "",
+    service: "",
+    message: "",
+  };
+}
 
 function validate(values: FormState): Partial<Record<keyof FormState, string>> {
   const errors: Partial<Record<keyof FormState, string>> = {};
@@ -46,7 +49,10 @@ const fieldClass =
   "mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-navy shadow-sm outline-none transition-colors placeholder:text-slate-400 focus:border-brand focus:ring-2 focus:ring-brand/20";
 
 export function ContactForm() {
-  const [values, setValues] = useState<FormState>(initial);
+  const searchParams = useSearchParams();
+  const [values, setValues] = useState<FormState>(() =>
+    emptyForm(searchParams.get("email") ?? "", searchParams.get("company") ?? ""),
+  );
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -195,7 +201,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-6 w-full rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 disabled:opacity-60 sm:w-auto sm:min-w-[200px]"
+        className="btn-gradient mt-6 w-full rounded-full px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[rgba(22,119,232,0.18)] transition-all hover:shadow-lg disabled:opacity-60 sm:w-auto sm:min-w-[200px]"
       >
         {submitting ? "Submitting…" : "Request Consultation"}
       </button>

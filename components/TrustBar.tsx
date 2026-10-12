@@ -1,3 +1,4 @@
+import { BrandBackground } from "@/components/BrandBackground";
 import { cn } from "@/lib/utils";
 
 function LogoMark({ name }: { name: string }) {
@@ -28,12 +29,13 @@ export function TrustBar({
   return (
     <section
       className={cn(
-        "border-y border-slate-200/80 bg-white py-10 sm:py-12",
+        "relative overflow-hidden border-y border-slate-200/80 py-10 sm:py-12",
         className,
       )}
       aria-label="Trusted by"
     >
-      <div className="container">
+      <BrandBackground variant="trust" />
+      <div className="container relative">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
           Trusted by growing businesses
         </p>
@@ -41,7 +43,7 @@ export function TrustBar({
           {logos.map((name) => (
             <li
               key={name}
-              className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/80 px-4 py-3 transition-colors hover:border-slate-200 hover:bg-white hover:shadow-sm"
+              className="flex items-center gap-3 rounded-xl border border-[rgba(8,32,56,0.08)] bg-soft-white/80 px-4 py-3 transition-colors hover:border-primary/25 hover:bg-white hover:shadow-sm"
             >
               <LogoMark name={name} />
               <span className="text-sm font-semibold text-slate-600">{name}</span>

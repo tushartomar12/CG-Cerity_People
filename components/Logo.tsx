@@ -6,7 +6,13 @@ import { useLogoTransition } from "@/components/LogoTransitionContext";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
-export function Logo({ className = "" }: { className?: string }) {
+export function Logo({
+  className = "",
+  inverted = false,
+}: {
+  className?: string;
+  inverted?: boolean;
+}) {
   const { setBrandAnchor, isTransitioning, justLanded } = useLogoTransition();
 
   return (
@@ -25,6 +31,7 @@ export function Logo({ className = "" }: { className?: string }) {
       <LogoBrand
         layout="header"
         showTagline
+        inverted={inverted}
         className="transition-transform duration-300 group-hover:scale-[1.02] group-focus-visible:scale-[1.02]"
       />
     </Link>

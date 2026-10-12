@@ -1,10 +1,11 @@
 import { CheckCircle2 } from "lucide-react";
+import { BrandBackground } from "@/components/BrandBackground";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { CTASection } from "@/components/CTASection";
 import { HeroSection } from "@/components/HeroSection";
+import { HomePageClass } from "@/components/HomePageClass";
 import { JsonLd } from "@/components/JsonLd";
 import { SectionHeading } from "@/components/SectionHeading";
-import { approachSteps, teamMembers, whyChooseUs } from "@/lib/data";
+import { whyChooseUs } from "@/lib/data";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -18,21 +19,34 @@ export const metadata = buildMetadata({
 export default function AboutPage() {
   return (
     <>
+      <HomePageClass name="about-page" />
       <JsonLd
         data={breadcrumbSchema([
           { name: "Home", path: "/" },
           { name: "About", path: "/about" },
         ])}
       />
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "About Us" }]} />
-      <HeroSection
-        title="Technology Meets HR Expertise"
-        description="We combine HR technology, automation, consulting, and compliance expertise to help organizations build efficient and scalable HR operations — for startups, SMBs, and enterprises."
-        size="compact"
-      />
+      <section className="relative -mt-16 overflow-hidden lg:-mt-[4.5rem]">
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <img
+            src="/brand-background.jpg"
+            alt=""
+            className="h-full w-full object-cover object-center"
+          />
+        </div>
+        <div className="relative pt-16 lg:pt-[4.5rem]">
+          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "About Us" }]} />
+          <HeroSection
+            title="Technology Meets HR Expertise"
+            description="We combine HR technology, automation, consulting, and compliance expertise to help organizations build efficient and scalable HR operations — for startups, SMBs, and enterprises."
+            size="compact"
+          />
+        </div>
+      </section>
 
-      <section className="py-16 sm:py-20">
-        <div className="container grid gap-12 lg:grid-cols-2 lg:items-start">
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        <BrandBackground variant="about" />
+        <div className="container relative grid gap-12 lg:grid-cols-2 lg:items-start">
           <div>
             <SectionHeading align="left" title="Who We Are" />
             <p className="mt-6 text-slate-600 leading-relaxed">
@@ -47,7 +61,7 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="space-y-6">
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-6">
+            <div className="rounded-xl border border-[rgba(8,32,56,0.08)] bg-soft-white p-6">
               <h2 className="text-lg font-semibold text-navy">Our Mission</h2>
               <p className="mt-2 text-slate-600">
                 Make HR simpler, smarter and more strategic through technology and expertise.
@@ -64,105 +78,69 @@ export default function AboutPage() {
         </div>
       </section>
 
-     {/* =========================================================
-    LEADERSHIP & TEAM
-========================================================= */}
-<section className="bg-slate-50 py-16 sm:py-20">
-  <div className="container">
-
-    <SectionHeading
-      title="Leadership & Team"
-      description="Experienced practitioners across HR technology and consulting."
-    />
-
-    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
-      {/* =====================================================
-          ROHIT LOHIA
-      ===================================================== */}
-      <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
-        <div className="aspect-[4/3] overflow-hidden bg-slate-100">
-          <img
-            src="/rohit.webp"
-            alt="Rohit Lohia"
-            className="h-full w-full object-cover"
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        <BrandBackground variant="people" />
+        <div className="container relative">
+          <SectionHeading
+            title="Leadership & Team"
+            description="Experienced practitioners across HR technology and consulting."
           />
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+              <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+                <img
+                  src="/rohit.webp"
+                  alt="Rohit Lohia"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-5">
+                <h3 className="font-semibold text-navy">Rohit Lohia</h3>
+                <p className="text-sm font-medium text-accent">Chief Executive Officer</p>
+                <p className="mt-2 text-sm text-slate-600">
+                  15+ years leading HR transformation programs for global enterprises.
+                </p>
+              </div>
+            </article>
+
+            <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+              <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+                <img
+                  src="/indu.webp"
+                  alt="Indu Wadhwa"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-5">
+                <h3 className="font-semibold text-navy">Indu Wadhwa</h3>
+                <p className="text-sm font-medium text-accent">HR & Consulting Leader</p>
+                <p className="mt-2 text-sm text-slate-600">
+                  Experienced practitioner across HR technology, consulting, and workforce strategy.
+                </p>
+              </div>
+            </article>
+
+            <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+              <div
+                className="aspect-[4/3] bg-gradient-to-br from-slate-200 to-slate-300"
+                aria-hidden
+              />
+              <div className="p-5">
+                <h3 className="font-semibold text-navy">Pallavi</h3>
+                <p className="text-sm font-medium text-accent">HR & Consulting Leader</p>
+                <p className="mt-2 text-sm text-slate-600">
+                  Experienced practitioner across HR technology, consulting, and workforce strategy.
+                </p>
+              </div>
+            </article>
+          </div>
         </div>
+      </section>
 
-        <div className="p-5">
-          <h3 className="font-semibold text-navy">
-            Rohit Lohia
-          </h3>
-
-          <p className="text-sm font-medium text-accent">
-            Chief Executive Officer
-          </p>
-
-          <p className="mt-2 text-sm text-slate-600">
-            15+ years leading HR transformation programs for global enterprises.
-          </p>
-        </div>
-      </article>
-
-
-      {/* =====================================================
-          INDU WADHWA
-      ===================================================== */}
-      <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
-        <div className="aspect-[4/3] overflow-hidden bg-slate-100">
-          <img
-            src="/indu.webp"
-            alt="Indu Wadhwa"
-            className="h-full w-full object-cover"
-          />
-        </div>
-
-        <div className="p-5">
-          <h3 className="font-semibold text-navy">
-            Indu Wadhwa
-          </h3>
-
-          <p className="text-sm font-medium text-accent">
-            HR & Consulting Leader
-          </p>
-
-          <p className="mt-2 text-sm text-slate-600">
-            Experienced practitioner across HR technology, consulting, and workforce strategy.
-          </p>
-        </div>
-      </article>
-
-
-      {/* =====================================================
-          PALLAVI
-      ===================================================== */}
-      <article className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
-        <div
-          className="aspect-[4/3] bg-gradient-to-br from-slate-200 to-slate-300"
-          aria-hidden
-        />
-
-        <div className="p-5">
-          <h3 className="font-semibold text-navy">
-            Pallavi
-          </h3>
-
-          <p className="text-sm font-medium text-accent">
-            HR & Consulting Leader
-          </p>
-
-          <p className="mt-2 text-sm text-slate-600">
-            Experienced practitioner across HR technology, consulting, and workforce strategy.
-          </p>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-      <section className="py-16 sm:py-20">
-        <div className="container">
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        <BrandBackground variant="consulting" />
+        <div className="container relative">
           <SectionHeading title="Why Organizations Choose Us" />
           <ul className="mt-10 grid gap-4 sm:grid-cols-2">
             {whyChooseUs.map((item) => (
@@ -178,29 +156,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-     <section className="bg-slate-50 py-16 sm:py-20">
-        <div className="container">
-          <SectionHeading title="Our Approach" description="A proven delivery model from discovery to continuous improvement." />
-          <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {approachSteps.map((step) => (
-              <li
-                key={step.title}
-                className="relative rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm"
-              >
-                <span className="text-sm font-bold text-accent">{step.step}</span>
-                <h3 className="mt-2 text-lg font-semibold text-navy">{step.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{step.description}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <CTASection
-        title="Let's Transform Your HR Operations"
-        description="Partner with our team to design, implement, and optimize your HR function."
-        buttonLabel="Book a Consultation"
-      />
     </>
   );
 }

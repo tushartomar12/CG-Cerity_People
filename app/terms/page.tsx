@@ -12,12 +12,14 @@ export default function TermsPage() {
   return (
     <>
       <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Terms & Conditions" }]} />
-      <div className="container max-w-3xl py-12 pb-20">
+      <div className="relative overflow-hidden">
+      <div className="container relative max-w-3xl py-12 pb-20">
         <h1 className="text-3xl font-bold text-navy">Terms & Conditions</h1>
         <p className="mt-4 text-slate-600 leading-relaxed">
           Placeholder terms content. Replace with your commercial terms, service agreements,
           and limitation of liability language.
         </p>
+      </div>
       </div>
     </>
   );
