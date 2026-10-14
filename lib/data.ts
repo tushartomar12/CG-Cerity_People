@@ -19,45 +19,6 @@ export const trustLogos = [
   "Horizon Logistics",
 ];
 
-export const hrChallenges = [
-  {
-    title: "Manual HR processes",
-    description:
-      "Spreadsheets and email chains slow down every HR task and increase error risk.",
-    icon: "clipboard",
-  },
-  {
-    title: "Payroll complexity",
-    description:
-      "Tax rules, deductions, and multi-location payroll make each cycle stressful.",
-    icon: "calculator",
-  },
-  {
-    title: "Compliance challenges",
-    description:
-      "Changing regulations demand accurate records, audits, and timely reporting.",
-    icon: "shield",
-  },
-  {
-    title: "Scattered employee data",
-    description:
-      "Profiles, documents, and history live in disconnected tools and folders.",
-    icon: "database",
-  },
-  {
-    title: "Time-consuming recruitment",
-    description:
-      "Hiring teams lose hours coordinating interviews, offers, and onboarding.",
-    icon: "users",
-  },
-  {
-    title: "Lack of HR analytics",
-    description:
-      "Leaders lack real-time visibility into headcount, attrition, and workforce costs.",
-    icon: "chart",
-  },
-] as const;
-
 export const hrTechModules = [
   { title: "Employee Management", description: "Central profiles, org structure, and records." },
   { title: "Recruitment & ATS", description: "End-to-end hiring pipelines and candidate tracking." },
@@ -107,13 +68,6 @@ export const whyChooseUs = [
   },
 ];
 
-export const stats = [
-  { value: 500, suffix: "+", label: "Businesses Supported" },
-  { value: 50, suffix: "K+", label: "Employees Managed" },
-  { value: 20, suffix: "+", label: "HR Processes Automated" },
-  { value: 10, suffix: "+", label: "Countries Supported" },
-];
-
 export const approachSteps = [
   {
     step: "01",
@@ -134,29 +88,6 @@ export const approachSteps = [
     step: "04",
     title: "Optimize",
     description: "Measure outcomes and continuously improve HR operations.",
-  },
-];
-
-export const teamMembers = [
-  {
-    name: "Priya Sharma",
-    role: "Chief Executive Officer",
-    bio: "15+ years leading HR transformation programs for global enterprises.",
-  },
-  {
-    name: "Michael Chen",
-    role: "Head of HR Technology",
-    bio: "Product and implementation leader specializing in HRMS and payroll platforms.",
-  },
-  {
-    name: "Anita Desai",
-    role: "Director, HR Consulting",
-    bio: "Advises leadership teams on workforce strategy, compliance, and org design.",
-  },
-  {
-    name: "James Okonkwo",
-    role: "VP, Customer Success",
-    bio: "Ensures clients achieve measurable ROI from HR technology and consulting.",
   },
 ];
 
@@ -216,32 +147,6 @@ export const consultingServicesDetailed = [
     description: "Design goal-setting and performance review frameworks.",
   },
   
-];
-
-export const solutionsByNeed = [
-  "HR Automation",
-  "Payroll Automation",
-  "Employee Management",
-  "Workforce Management",
-  "Recruitment",
-  "Compliance",
-  "HR Analytics",
-  "Digital Transformation",
-];
-
-export const companySizes = [
-  {
-    title: "Startups",
-    description: "Simple and scalable HR systems that grow with your team.",
-  },
-  {
-    title: "SMBs",
-    description: "Automate HR and payroll operations without enterprise complexity.",
-  },
-  {
-    title: "Enterprises",
-    description: "Advanced workforce management, integrations, and HR analytics.",
-  },
 ];
 
 export const industries = [

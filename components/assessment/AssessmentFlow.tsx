@@ -8,6 +8,7 @@ import {
 } from "@/lib/assessment-data";
 import { scoreAssessment, type AssessmentAnswers, type AssessmentResult } from "@/lib/assessment-scoring";
 import { submitAssessment } from "@/lib/submit-assessment";
+import { assessmentDetailsSchema, zodFieldErrors } from "@/lib/validation";
 import { DetailsStep } from "./DetailsStep";
 import { Intro } from "./Intro";
 import { QuestionStep } from "./QuestionStep";
@@ -17,22 +18,6 @@ type Phase = "intro" | "details" | "questions" | "analyzing" | "results";
 
 const TOTAL_STEPS = ASSESSMENT_STEPS.length + 1;
 
-function validateDetails(values: AssessmentDetails): Partial<Record<keyof AssessmentDetails, string>> {
-  const errors: Partial<Record<keyof AssessmentDetails, string>> = {};
-  if (!values.email.trim()) errors.email = "Work email is required.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
-    errors.email = "Enter a valid work email.";
-  if (!values.company.trim()) errors.company = "Company is required.";
-  if (!values.name.trim()) errors.name = "Name is required.";
-  if (!values.companySize) errors.companySize = "Select company size.";
-  if (!values.industry) errors.industry = "Select industry.";
-  if (!values.hrHeadcount.trim()) errors.hrHeadcount = "Enter HR headcount.";
-  else if (!/^\d+$/.test(values.hrHeadcount) || Number(values.hrHeadcount) < 0)
-    errors.hrHeadcount = "Enter a whole number.";
-  if (!values.hrmsToday) errors.hrmsToday = "Select how you run HR today.";
-  return errors;
-}
-
 export function AssessmentFlow() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [details, setDetails] = useState<AssessmentDetails>(emptyDetails);
@@ -41,23 +26,56 @@ export function AssessmentFlow() {
   const [stepIndex, setStepIndex] = useState(0);
   const [qErrors, setQErrors] = useState<Record<string, string>>({});
   const [result, setResult] = useState<AssessmentResult | null>(null);
+  const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState("");
+  const [website, setWebsite] = useState("");
+  const [sendFailed, setSendFailed] = useState(false);
+  const [retrying, setRetrying] = useState(false);
+  const [userEmailSent, setUserEmailSent] = useState(false);
 
   const onDetailChange = (key: keyof AssessmentDetails, value: string) => {
     setDetails((d) => ({ ...d, [key]: value }));
     setDetailErrors((e) => ({ ...e, [key]: undefined }));
   };
 
+  const sendLead = async (scored: AssessmentResult) => {
+    return submitAssessment({
+      details,
+      answers,
+      scores: scored,
+      consent,
+      website,
+      submittedAt: new Date().toISOString(),
+    });
+  };
+
   const finish = async () => {
     const scored = scoreAssessment(answers, details.companySize);
     setResult(scored);
     setPhase("analyzing");
-    await submitAssessment({
-      details,
-      answers,
-      scores: scored,
-      submittedAt: new Date().toISOString(),
-    });
+    try {
+      const sent = await sendLead(scored);
+      setSendFailed(false);
+      setUserEmailSent(sent.userEmailSent);
+    } catch {
+      setSendFailed(true);
+      setUserEmailSent(false);
+    }
     setPhase("results");
+  };
+
+  const retrySend = async () => {
+    if (!result) return;
+    setRetrying(true);
+    try {
+      const sent = await sendLead(result);
+      setSendFailed(false);
+      setUserEmailSent(sent.userEmailSent);
+    } catch {
+      setSendFailed(true);
+    } finally {
+      setRetrying(false);
+    }
   };
 
   if (phase === "intro") {
@@ -72,10 +90,27 @@ export function AssessmentFlow() {
         onChange={onDetailChange}
         totalSteps={TOTAL_STEPS}
         onBack={() => setPhase("intro")}
+        consent={consent}
+        consentError={consentError}
+        onConsentChange={(value) => {
+          setConsent(value);
+          setConsentError("");
+        }}
+        website={website}
+        onWebsiteChange={setWebsite}
         onNext={() => {
-          const next = validateDetails(details);
-          if (Object.keys(next).length > 0) {
+          const parsed = assessmentDetailsSchema.safeParse(details);
+          if (!parsed.success) {
+            const fields = zodFieldErrors(parsed.error);
+            const next: Partial<Record<keyof AssessmentDetails, string>> = {};
+            for (const [k, v] of Object.entries(fields)) {
+              next[k as keyof AssessmentDetails] = v;
+            }
             setDetailErrors(next);
+            return;
+          }
+          if (!consent) {
+            setConsentError("Consent is required.");
             return;
           }
           setPhase("questions");
@@ -99,6 +134,10 @@ export function AssessmentFlow() {
       <Results
         details={details}
         result={result}
+        sendFailed={sendFailed}
+        retrying={retrying}
+        userEmailSent={userEmailSent}
+        onRetrySend={() => void retrySend()}
         onRetake={() => {
           setPhase("intro");
           setStepIndex(0);
@@ -107,6 +146,11 @@ export function AssessmentFlow() {
           setDetails(emptyDetails());
           setDetailErrors({});
           setQErrors({});
+          setConsent(false);
+          setConsentError("");
+          setWebsite("");
+          setSendFailed(false);
+          setUserEmailSent(false);
         }}
       />
     );

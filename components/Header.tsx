@@ -37,7 +37,12 @@ function headerMotif(pathname: string): {
   if (pathname === "/") {
     return { variant: "hero", compact: false, fill: "white" };
   }
-  if (pathname === "/assessment" || pathname.startsWith("/assessment/")) {
+  if (
+    pathname === "/assessment" ||
+    pathname.startsWith("/assessment/") ||
+    pathname === "/assessment0" ||
+    pathname.startsWith("/assessment0/")
+  ) {
     return { variant: "hero", compact: false, fill: "white" };
   }
   return { variant: "default", compact: false, fill: "white" };

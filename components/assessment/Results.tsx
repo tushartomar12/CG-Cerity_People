@@ -1,31 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { pdf } from "@react-pdf/renderer";
 import { ButtonLink } from "@/components/ButtonLink";
 import { BAND_COLORS, moduleCopy, type AssessmentDetails } from "@/lib/assessment-data";
 import type { AssessmentResult } from "@/lib/assessment-scoring";
 import { siteConfig } from "@/lib/site-config";
 import { AssessmentCharts } from "./AssessmentCharts";
-import { ReportDocument } from "./ReportDocument";
+import { buildAssessmentPdfBlob } from "./buildAssessmentPdf";
 
 type Props = {
   details: AssessmentDetails;
   result: AssessmentResult;
   onRetake: () => void;
+  sendFailed?: boolean;
+  retrying?: boolean;
+  userEmailSent?: boolean;
+  onRetrySend?: () => void;
 };
 
-export function Results({ details, result, onRetake }: Props) {
+export function Results({
+  details,
+  result,
+  onRetake,
+  sendFailed,
+  retrying,
+  userEmailSent,
+  onRetrySend,
+}: Props) {
   const [downloading, setDownloading] = useState(false);
   const bookHref = `/contact?email=${encodeURIComponent(details.email)}&company=${encodeURIComponent(details.company)}`;
 
   const downloadPdf = async () => {
     setDownloading(true);
     try {
-      const logoSrc = `${window.location.origin}/cerity-logo.png`;
-      const blob = await pdf(
-        <ReportDocument details={details} result={result} logoSrc={logoSrc} />,
-      ).toBlob();
+      const blob = await buildAssessmentPdfBlob(details, result);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -53,6 +61,26 @@ export function Results({ details, result, onRetake }: Props) {
           <strong>{result.indicativeHoursPerMonth}</strong>. Indicative compliance risk:{" "}
           <strong>{result.complianceLevel}</strong>.
         </p>
+        {userEmailSent ? (
+          <p className="mt-2 text-sm text-slate-600">
+            We’ve also emailed a copy of your report to {details.email}.
+          </p>
+        ) : null}
+        {sendFailed ? (
+          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-navy" role="alert">
+            <p>We couldn’t send your details, please try again.</p>
+            {onRetrySend ? (
+              <button
+                type="button"
+                onClick={onRetrySend}
+                disabled={retrying}
+                className="mt-3 rounded-full bg-[#1677E8] px-5 py-2 text-sm font-semibold text-white disabled:opacity-60"
+              >
+                {retrying ? "Retrying…" : "Retry"}
+              </button>
+            ) : null}
+          </div>
+        ) : null}
         <div className="mt-6 flex flex-wrap gap-3">
           <button
             type="button"

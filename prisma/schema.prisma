@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum MaturityBand {
+  Critical
+  Reactive
+  Developing
+  Optimized
+}
+
+enum AssessmentType {
+  FULL
+  QUICK
+}
+
+model ContactSubmission {
+  id               String      @id @default(cuid())
+  name             String
+  email            String
+  phone            String?
+  company          String?
+  companySize      String?
+  country          String?
+  service          String?
+  message          String
+  consent          Boolean
+  consentAt        DateTime
+  source           String      @default("contact-page")
+  salesEmailStatus EmailStatus @default(PENDING)
+  userEmailStatus  EmailStatus @default(PENDING)
+  salesEmailError  String?
+  userEmailError   String?
+  salesEmailSentAt DateTime?
+  userEmailSentAt  DateTime?
+  ipHash           String?
+  userAgent        String?
+  createdAt        DateTime    @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model AssessmentSubmission {
+  id               String         @id @default(cuid())
+  assessmentType   AssessmentType @default(FULL)
+  name             String?
+  email            String
+  phone            String?
+  jobTitle         String?
+  company          String
+  companySize      String
+  industry         String
+  hrHeadcount      String
+  currentHrms      String
+  answers          Json
+  categoryScores   Json
+  overallScore     Int
+  maturityBand     MaturityBand
+  textAnswers      Json
+  consent          Boolean
+  consentAt        DateTime
+  salesEmailStatus EmailStatus  @default(PENDING)
+  userEmailStatus  EmailStatus  @default(PENDING)
+  salesEmailError  String?
+  userEmailError   String?
+  salesEmailSentAt DateTime?
+  userEmailSentAt  DateTime?
+  pdfFileName      String?
+  pdfStorageKey    String?
+  ipHash           String?
+  createdAt        DateTime     @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}

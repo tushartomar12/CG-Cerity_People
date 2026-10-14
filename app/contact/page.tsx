@@ -84,12 +84,17 @@ export default function ContactPage() {
                 </li>
               </ul>
             </div>
-            <div
-              className="mt-6 flex aspect-[4/3] items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-100 text-sm text-slate-500"
-              role="img"
-              aria-label="Map placeholder — embed Google Maps or Mapbox here"
-            >
-              Map placeholder
+            <div className="mt-6 aspect-[4/3] overflow-hidden rounded-2xl border border-white/15 bg-slate-100 shadow-[0_16px_50px_rgba(0,0,0,0.22)]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.777125682582!2d77.30782837409178!3d28.576454586627612!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5d48f8a1e79%3A0x9b8df9ae1a488fb9!2sCerity%20Global!5e0!3m2!1sen!2sin!4v1791866751201!5m2!1sen!2sin"
+                title="Cerity Global on Google Maps"
+                width="600"
+                height="450"
+                className="h-full w-full border-0"
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
             </div>
           </aside>
         </div>

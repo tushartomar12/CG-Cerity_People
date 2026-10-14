@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { companySizesForm, contactServices } from "@/lib/data";
+import { CONSENT_LABEL, contactSchema, zodFieldErrors } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 
 type FormState = {
@@ -30,20 +31,7 @@ function emptyForm(email = "", company = ""): FormState {
   };
 }
 
-function validate(values: FormState): Partial<Record<keyof FormState, string>> {
-  const errors: Partial<Record<keyof FormState, string>> = {};
-  if (!values.fullName.trim()) errors.fullName = "Full name is required.";
-  if (!values.email.trim()) errors.email = "Work email is required.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
-    errors.email = "Enter a valid email address.";
-  if (!values.phone.trim()) errors.phone = "Phone number is required.";
-  if (!values.company.trim()) errors.company = "Company name is required.";
-  if (!values.companySize) errors.companySize = "Select company size.";
-  if (!values.country.trim()) errors.country = "Country is required.";
-  if (!values.service) errors.service = "Select a service.";
-  if (!values.message.trim()) errors.message = "Please share your requirements.";
-  return errors;
-}
+type ClientErrors = Partial<Record<keyof FormState | "consent" | "form", string>>;
 
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-navy shadow-sm outline-none transition-colors placeholder:text-slate-400 focus:border-brand focus:ring-2 focus:ring-brand/20";
@@ -53,27 +41,56 @@ export function ContactForm() {
   const [values, setValues] = useState<FormState>(() =>
     emptyForm(searchParams.get("email") ?? "", searchParams.get("company") ?? ""),
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [errors, setErrors] = useState<ClientErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState("");
 
   const update = (key: keyof FormState, val: string) => {
     setValues((v) => ({ ...v, [key]: val }));
-    setErrors((e) => ({ ...e, [key]: undefined }));
+    setErrors((e) => ({ ...e, [key]: undefined, form: undefined }));
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const nextErrors = validate(values);
-    if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors);
+    const parsed = contactSchema.safeParse({ ...values, consent, website });
+    if (!parsed.success) {
+      const fields = zodFieldErrors(parsed.error);
+      const next: ClientErrors = {};
+      for (const [k, v] of Object.entries(fields)) {
+        next[k as keyof ClientErrors] = v;
+      }
+      setErrors(next);
       return;
     }
     setSubmitting(true);
-    // Hook for API / CRM integration
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitting(false);
-    setSubmitted(true);
+    setErrors({});
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      if (res.status === 429) {
+        setErrors({ form: "Too many requests. Please try again in a few minutes." });
+        return;
+      }
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { fields?: Record<string, string> };
+        if (body.fields) {
+          setErrors(body.fields as ClientErrors);
+          return;
+        }
+        setErrors({ form: "We couldn’t send your details. Please try again." });
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setErrors({ form: "We couldn’t send your details. Please try again." });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -95,7 +112,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8"
+      className="relative rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8"
       noValidate
     >
       <div className="grid gap-5 sm:grid-cols-2">
@@ -198,6 +215,42 @@ export function ContactForm() {
           </Field>
         </div>
       </div>
+      <div className="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
+      <label className="mt-5 flex items-start gap-2 text-sm text-navy">
+        <input
+          type="checkbox"
+          className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand"
+          checked={consent}
+          onChange={(e) => {
+            setConsent(e.target.checked);
+            setErrors((er) => ({ ...er, consent: undefined }));
+          }}
+        />
+        <span>
+          {CONSENT_LABEL}
+          <span className="text-red-500"> *</span>
+        </span>
+      </label>
+      {errors.consent ? (
+        <p className="mt-1 text-xs text-red-600" role="alert">
+          {errors.consent}
+        </p>
+      ) : null}
+      {errors.form ? (
+        <p className="mt-3 text-sm text-red-600" role="alert">
+          {errors.form}
+        </p>
+      ) : null}
       <button
         type="submit"
         disabled={submitting}

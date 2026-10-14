@@ -1,250 +1,131 @@
+import { Document, Image, Link, Page, Text, View } from "@react-pdf/renderer";
 import {
-  Circle,
-  Document,
-  Font,
-  Image,
-  Link,
-  Page,
-  Path,
-  Rect,
-  StyleSheet,
-  Svg,
-  Text,
-  View,
-} from "@react-pdf/renderer";
-import {
-  BAND_COLORS,
   INDICATIVE_ASSUMPTIONS,
+  MATURITY_BANDS,
   moduleCopy,
   type AssessmentDetails,
   type MaturityBand,
 } from "@/lib/assessment-data";
 import type { AssessmentResult } from "@/lib/assessment-scoring";
 import { siteConfig } from "@/lib/site-config";
+import { BarChartH } from "./report/BarChartH";
+import { BeforeAfter } from "./report/BeforeAfter";
+import { FigureBlock } from "./report/FigureBlock";
+import { FlowDiagram } from "./report/FlowDiagram";
+import { GaugeDial } from "./report/GaugeDial";
+import { Heatmap } from "./report/Heatmap";
+import { PriorityMatrix } from "./report/PriorityMatrix";
+import { RadarChart } from "./report/RadarChart";
+import { H2, P, ReportPage, TocRow } from "./report/ReportChrome";
+import { BAND_FILL, answerStatus, bandStatus, clipText, reportTheme } from "./report/report-theme";
+import { StatTile } from "./report/StatTile";
+import { Timeline } from "./report/Timeline";
 
-Font.register({
-  family: "DM Sans",
-  fonts: [
-    {
-      src: "https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@5.2.5/latin-400-normal.ttf",
-      fontWeight: 400,
-    },
-    {
-      src: "https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@5.2.5/latin-600-normal.ttf",
-      fontWeight: 600,
-    },
-    {
-      src: "https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@5.2.5/latin-700-normal.ttf",
-      fontWeight: 700,
-    },
-  ],
-});
-
-Font.register({
-  family: "DM Serif Display",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/dm-serif-display@5.2.5/latin-400-normal.ttf",
-});
-
-const NAVY = "#102840";
-const BLUE = "#1677E8";
-const GOLD = "#F59E0B";
-const CREAM = "#FFFBEB";
-
-const styles = StyleSheet.create({
-  page: {
-    fontFamily: "DM Sans",
-    fontSize: 9,
-    color: NAVY,
-    paddingTop: 48,
-    paddingBottom: 56,
-    paddingHorizontal: 40,
-    backgroundColor: "#FFFFFF",
-  },
-  footer: {
-    position: "absolute",
-    bottom: 18,
-    left: 40,
-    right: 40,
-    borderTopWidth: 1,
-    borderTopColor: "#E2E8F0",
-    paddingTop: 6,
-  },
-  footerText: {
-    fontSize: 7,
-    color: "#64748B",
-    lineHeight: 1.35,
-  },
-  h1: { fontFamily: "DM Serif Display", fontSize: 26, color: NAVY },
-  h2: { fontFamily: "DM Serif Display", fontSize: 16, color: NAVY, marginBottom: 8 },
-  muted: { color: "#64748B", fontSize: 9 },
-  card: {
-    borderWidth: 1,
-    borderColor: "#FDE68A",
-    backgroundColor: CREAM,
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 8,
-  },
-  row: { flexDirection: "row", gap: 8 },
-  tableHeader: {
-    flexDirection: "row",
-    backgroundColor: NAVY,
-    color: "#FFFFFF",
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-  },
-  tableRow: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E2E8F0",
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-  },
-});
-
-function scoreFill(score: 0 | 1 | 2 | 3) {
-  if (score === 0) return "#FECACA";
-  if (score === 3) return "#BBF7D0";
-  return "#FDE68A";
-}
-
-function Footer() {
-  return (
-    <View style={styles.footer} fixed>
-      <Text style={styles.footerText}>
-        Indicative analysis based on self-reported answers. Not a legal, tax, or statutory audit.
-      </Text>
-      <Text style={styles.footerText}>{INDICATIVE_ASSUMPTIONS.join(" ")}</Text>
-      <Text
-        style={[styles.footerText, { marginTop: 3, textAlign: "right" }]}
-        render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
-      />
-    </View>
-  );
-}
-
-function HeaderBar({ logoSrc }: { logoSrc: string }) {
-  return (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 16,
-      }      }
-    >
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image src={logoSrc} style={{ height: 22, width: 110 }} />
-      <Text style={{ fontSize: 8, color: GOLD }}>HR Maturity Assessment</Text>
-    </View>
-  );
-}
-
-function GaugeSvg({ overall, band }: { overall: number; band: MaturityBand }) {
-  const color = BAND_COLORS[band];
-  const r = 70;
-  const cx = 90;
-  const cy = 88;
-  const start = Math.PI;
-  const end = 0;
-  const angle = start + (overall / 100) * (end - start);
-  const sx = cx + r * Math.cos(start);
-  const sy = cy + r * Math.sin(start);
-  const ex = cx + r * Math.cos(angle);
-  const ey = cy + r * Math.sin(angle);
-  const large = overall > 50 ? 1 : 0;
-  return (
-    <Svg width={180} height={110}>
-      <Path
-        d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
-        stroke="#E2E8F0"
-        strokeWidth={12}
-        fill="none"
-      />
-      {overall > 0 ? (
-        <Path
-          d={`M ${sx} ${sy} A ${r} ${r} 0 ${large} 1 ${ex} ${ey}`}
-          stroke={color}
-          strokeWidth={12}
-          fill="none"
-        />
-      ) : null}
-      <Circle cx={cx} cy={cy} r={4} fill={color} />
-    </Svg>
-  );
-}
-
-function RadarSvg({ values }: { values: number[] }) {
-  const cx = 140;
-  const cy = 130;
-  const r = 95;
-  const n = values.length;
-  const pt = (i: number, mag: number) => {
-    const a = -Math.PI / 2 + (i / n) * Math.PI * 2;
-    return [cx + mag * Math.cos(a), cy + mag * Math.sin(a)] as const;
+function shortCat(name: string) {
+  const map: Record<string, string> = {
+    "Recruitment & Hiring": "Hiring",
+    Onboarding: "Onboarding",
+    "Attendance & Leave": "Attendance",
+    "Payroll, Compliance & HR Data": "Payroll / data",
   };
-  const rings = [0.25, 0.5, 0.75, 1];
-  const poly = values
-    .map((v, i) => {
-      const [x, y] = pt(i, (v / 100) * r);
-      return `${x},${y}`;
-    })
-    .join(" ");
+  return map[name] ?? name;
+}
+
+function riskLine(band: MaturityBand): string {
+  if (band === "Critical") {
+    return "Indicative: leaving this as-is keeps high rework and weak evidence for the monthly cycle.";
+  }
+  if (band === "Reactive") {
+    return "Indicative: issues are handled after they appear, so time and error risk stay in the process.";
+  }
+  if (band === "Developing") {
+    return "Indicative: some tools exist, but hand-offs still depend on people remembering the next step.";
+  }
+  return "Keep it up: the next-level move is tighter reporting and fewer exceptions, not a greenfield rebuild.";
+}
+
+function todayFlow(category: string): string[] {
+  if (category.startsWith("Recruitment")) return ["Inbox / WhatsApp", "Ad-hoc interviews", "Scattered notes"];
+  if (category === "Onboarding") return ["Paper / email", "IT chase-up", "Incomplete record"];
+  if (category.startsWith("Attendance")) return ["Register / sheet", "Manager approval", "Payroll true-up"];
+  return ["Manual inputs", "Filing reminders", "Leadership extract"];
+}
+
+function automatedFlow(modules: string[]): string[] {
+  const names = modules.length ? modules : ["Employee Management"];
+  if (names.length === 1) return [names[0], "Approvals in-record", "Payroll / reports"];
+  return [...names.slice(0, 2), "Payroll / reports"];
+}
+
+function Chip({ band }: { band: MaturityBand }) {
   return (
-    <Svg width={280} height={260}>
-      {rings.map((ring) => {
-        const d = Array.from({ length: n }, (_, i) => {
-          const [x, y] = pt(i, r * ring);
-          return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-        }).join(" ");
-        return <Path key={ring} d={`${d} Z`} stroke="#CBD5E1" strokeWidth={0.6} fill="none" />;
-      })}
-      {values.map((_, i) => {
-        const [x, y] = pt(i, r);
-        return <Path key={i} d={`M ${cx} ${cy} L ${x} ${y}`} stroke="#E2E8F0" strokeWidth={0.6} />;
-      })}
-      <Path
-        d={`${poly
-          .split(" ")
-          .map((p, i) => `${i === 0 ? "M" : "L"} ${p}`)
-          .join(" ")} Z`}
-        fill={BLUE}
-        fillOpacity={0.28}
-        stroke={BLUE}
-        strokeWidth={1.2}
-      />
-    </Svg>
+    <Text
+      style={{
+        backgroundColor: BAND_FILL[band],
+        color: reportTheme.white,
+        fontSize: 8,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+      }}
+    >
+      {bandStatus(band)} · {band}
+    </Text>
   );
 }
 
-function BarSvg({
-  items,
+function Cell({
+  width,
+  children,
+  color = reportTheme.navy,
+  bold,
 }: {
-  items: { label: string; percent: number; band: MaturityBand }[];
+  width: `${number}%`;
+  children: string | number;
+  color?: string;
+  bold?: boolean;
 }) {
-  const w = 515;
-  const h = 200;
-  const barW = 36;
-  const gap = 14;
-  const base = 160;
   return (
-    <Svg width={w} height={h}>
-      <Path d={`M 0 ${base} L ${w} ${base}`} stroke="#E2E8F0" strokeWidth={1} />
-      {items.map((item, i) => {
-        const x = 8 + i * (barW + gap);
-        const bh = (item.percent / 100) * 140;
-        return (
-          <Rect
-            key={item.label}
-            x={x}
-            y={base - bh}
-            width={barW}
-            height={bh}
-            fill={BAND_COLORS[item.band]}
-          />
-        );
-      })}
-    </Svg>
+    <View style={{ width, paddingRight: 4 }}>
+      <Text style={{ fontSize: 8, color, fontWeight: bold ? 700 : 400 }}>{children}</Text>
+    </View>
+  );
+}
+
+function McqTable({ rows }: { rows: AssessmentResult["mcqRows"] }) {
+  return (
+    <View wrap={false}>
+      <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+        <Cell width="44%" color="#fff" bold>
+          Question
+        </Cell>
+        <Cell width="30%" color="#fff" bold>
+          Your answer
+        </Cell>
+        <Cell width="10%" color="#fff" bold>
+          Score
+        </Cell>
+        <Cell width="16%" color="#fff" bold>
+          Status
+        </Cell>
+      </View>
+      {rows.map((r) => (
+        <View
+          key={r.questionId}
+          wrap={false}
+          style={{
+            flexDirection: "row",
+            borderBottomWidth: 1,
+            borderBottomColor: reportTheme.line,
+            paddingVertical: 3,
+          }}
+        >
+          <Cell width="44%">{clipText(r.prompt, 110)}</Cell>
+          <Cell width="30%">{clipText(r.answerLabel, 70)}</Cell>
+          <Cell width="10%">{r.score}</Cell>
+          <Cell width="16%">{answerStatus(r.score)}</Cell>
+        </View>
+      ))}
+    </View>
   );
 }
 
@@ -252,233 +133,754 @@ export function ReportDocument({
   details,
   result,
   logoSrc,
+  coverLogoSrc,
+  generatedAt = new Date(),
 }: {
   details: AssessmentDetails;
   result: AssessmentResult;
   logoSrc: string;
+  coverLogoSrc?: string;
+  generatedAt?: Date;
 }) {
+  const company = clipText(details.company || "Your organisation", 60);
+  const dateLabel = generatedAt.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const ranked = [...result.categories].sort((a, b) => a.percent - b.percent);
+  const weakest = ranked[0];
+  const strongest = ranked[ranked.length - 1];
+  const criticalCount = result.categories.filter((c) => c.band === "Critical").length;
+  const allStrong = result.categories.every((c) => c.percent >= 80);
   const top3 = result.gaps.slice(0, 3);
-  const radarValues = result.categories.map((c) => c.percent);
-  const bars = result.categories.map((c) => ({
-    label: c.category,
-    percent: c.percent,
-    band: c.band,
+  const contactUrl = `${siteConfig.url}/contact`;
+
+  const verdict = allStrong
+    ? `${company} scores ${result.overall}/100 (${result.overallBand} / ${bandStatus(result.overallBand)}). Categories are in the Optimized band. This briefing records strengths and next-level optimizations rather than a turnaround plan. Figures remain indicative.`
+    : `${company} scores ${result.overall}/100 (${result.overallBand} / ${bandStatus(result.overallBand)}). The weakest area is ${weakest.category} at ${weakest.percent}. Priority work should start there, then ${ranked[1]?.category ?? "adjacent processes"}. All figures are indicative and based on self-reported answers.`;
+
+  const heatRows = result.categories.map((c) => ({
+    category: c.category,
+    cells: result.mcqRows
+      .filter((r) => r.category === c.category)
+      .map((r) => ({ label: r.questionId, score: r.score })),
   }));
 
+  const matrixPoints = result.gaps.map((g) => ({
+    label: shortCat(g.category),
+    impact: Math.max(g.indicativeHoursPerMonth, allStrong ? 4 : g.indicativeHoursPerMonth),
+    effort: Math.max(1, 100 - g.percent),
+  }));
+
+  const sortedBars = [...result.categories]
+    .sort((a, b) => a.percent - b.percent)
+    .map((c) => ({ label: shortCat(c.category), percent: c.percent, band: c.band }));
+
+  const radarItems = result.categories.map((c) => ({
+    label: shortCat(c.category),
+    percent: c.percent,
+  }));
+
+  const deepIds = ["deep1", "deep2", "deep3", "deep4"] as const;
+
   return (
-    <Document title={`HR Assessment — ${details.company || "Cerity People"}`}>
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h1}>HR Maturity Assessment</Text>
-        <Text style={{ marginTop: 8, fontSize: 12 }}>{details.company || "Your organisation"}</Text>
-        <Text style={styles.muted}>
-          Prepared for {details.name || details.email} · {details.industry || "Industry not specified"} ·{" "}
-          {details.companySize || "Size not specified"}
+    <Document title={`HR Health Assessment — ${company}`}>
+      <Page size="A4" style={{ backgroundColor: reportTheme.navy, padding: 36, fontFamily: reportTheme.font.sans }}>
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        <Image
+          src={coverLogoSrc ?? logoSrc}
+          style={{
+            height: 56,
+            width: 140,
+            objectFit: "contain",
+            objectPosition: "left center",
+            marginLeft: -10,
+          }}
+        />
+        <Text style={{ color: reportTheme.gold, marginTop: 28, fontSize: 11, letterSpacing: 1.2 }}>
+          CONFIDENTIAL · INDICATIVE
         </Text>
-        <View style={[styles.card, { marginTop: 20 }]}>
-          <Text style={{ fontSize: 11, fontWeight: 700 }}>Overall score (indicative)</Text>
-          <Text style={{ fontFamily: "DM Serif Display", fontSize: 32, marginTop: 4 }}>
-            {result.overall} · {result.overallBand}
-          </Text>
-          <Text style={styles.muted}>
-            HRMS today: {details.hrmsToday || "—"} · HR headcount: {details.hrHeadcount || "—"}
-          </Text>
+        <Text
+          style={{
+            fontFamily: reportTheme.font.serif,
+            fontSize: 28,
+            color: reportTheme.white,
+            marginTop: 10,
+            lineHeight: 1.2,
+          }}
+        >
+          HR Health Assessment Report
+        </Text>
+        <Text style={{ color: reportTheme.cream, fontSize: 14, marginTop: 14 }}>{company}</Text>
+        <Text style={{ color: "#CBD5E1", fontSize: 10, marginTop: 8, lineHeight: 1.45 }}>
+          Industry: {clipText(details.industry || "Not specified", 48)}
+          {"\n"}Size: {details.companySize || "Not specified"} · HR headcount: {details.hrHeadcount || "—"} · HRMS
+          today: {details.hrmsToday || "—"}
+          {"\n"}Prepared for {clipText(details.name || details.email || "Recipient", 50)} · {dateLabel}
+        </Text>
+        <View style={{ marginTop: 28, backgroundColor: reportTheme.white, padding: 16, borderRadius: 6 }}>
+          <Text style={{ fontSize: 9, color: reportTheme.muted }}>Overall score (0–100, indicative)</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 6 }}>
+            <GaugeDial score={result.overall} band={result.overallBand} width={240} />
+            <View style={{ marginLeft: 12, flex: 1 }}>
+              <Chip band={result.overallBand} />
+              <Text style={{ marginTop: 8, fontSize: 9.5, lineHeight: 1.4 }}>
+                Maturity band {result.overallBand} ({MATURITY_BANDS.find((b) => b.band === result.overallBand)?.min}–
+                {MATURITY_BANDS.find((b) => b.band === result.overallBand)?.max}). Weakest: {weakest.category} (
+                {weakest.percent}). Strongest: {strongest.category} ({strongest.percent}).
+              </Text>
+            </View>
+          </View>
         </View>
-        <Text style={[styles.h2, { marginTop: 12 }]}>What this briefing covers</Text>
-        <Text>
-          Category scores, priority gaps, indicative hours and compliance banding, mapped to existing
-          Cerity People modules. Figures are indicative only.
+        <Text style={{ color: "#94A3B8", fontSize: 8, marginTop: 24 }}>
+          {siteConfig.name} · Indicative analysis based on self-reported answers · Page 1 of the report
         </Text>
-        <Footer />
       </Page>
 
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h2}>Executive summary</Text>
-        <View style={styles.row}>
-          <View style={[styles.card, { flex: 1 }]}>
-            <Text style={{ fontWeight: 700 }}>Scorecard</Text>
-            <Text style={{ marginTop: 4 }}>
-              {result.overall} / 100 · {result.overallBand}
-            </Text>
-            <Text style={styles.muted}>
-              Indicative hours/month (priority gaps): {result.indicativeHoursPerMonth}
-            </Text>
-            <Text style={styles.muted}>Indicative compliance risk: {result.complianceLevel}</Text>
-          </View>
-        </View>
-        <Text style={[styles.h2, { marginTop: 10 }]}>Top gaps</Text>
-        {top3.map((g) => (
-          <View key={g.category} style={styles.card}>
-            <Text style={{ fontWeight: 700 }}>
-              {g.category} · {g.percent}% · {g.band}
-            </Text>
-            <Text style={{ marginTop: 3 }}>{g.insights[0]}</Text>
-          </View>
-        ))}
-        <Footer />
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h2}>Score visuals (same series as on-screen)</Text>
-        <View style={styles.row}>
-          <View>
-            <Text style={{ fontWeight: 700, marginBottom: 4 }}>Overall</Text>
-            <GaugeSvg overall={result.overall} band={result.overallBand} />
-            <Text>
-              {result.overall} · {result.overallBand}
-            </Text>
-          </View>
-          <View>
-            <Text style={{ fontWeight: 700, marginBottom: 4 }}>Radar (categories)</Text>
-            <RadarSvg values={radarValues} />
-          </View>
-        </View>
-        <Text style={{ fontWeight: 700, marginTop: 8, marginBottom: 4 }}>Bars by band colour</Text>
-        <BarSvg items={bars} />
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6, marginTop: 6 }}>
-          {result.categories.map((c) => (
-            <Text key={c.category} style={{ fontSize: 7, width: "48%" }}>
-              {c.category}: {c.percent}% ({c.band})
-            </Text>
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <H2>How to read this report</H2>
+        <P>
+          Category scores are the sum of multiple-choice points divided by the maximum (3 × number of scored questions),
+          as a percentage. Overall score is the equal-weighted average of category scores. Text answers are not scored.
+          Answers are self-reported and are not a legal, tax, or statutory audit.
+        </P>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", marginBottom: 8 }}>
+          {MATURITY_BANDS.map((b) => (
+            <View
+              key={b.band}
+              style={{
+                width: "48%",
+                marginRight: "2%",
+                marginBottom: 6,
+                borderWidth: 1,
+                borderColor: reportTheme.line,
+                padding: 6,
+              }}
+            >
+              <Text style={{ fontSize: 8, fontWeight: 700, color: BAND_FILL[b.band] }}>
+                {bandStatus(b.band)} · {b.band} · {b.min}–{b.max}
+              </Text>
+              <Text style={{ fontSize: 8, marginTop: 2 }}>
+                {b.band === "Critical"
+                  ? "Process is mostly manual or missing."
+                  : b.band === "Reactive"
+                    ? "Work happens after problems appear."
+                    : b.band === "Developing"
+                      ? "Tools exist but are not joined up."
+                      : "Integrated process with a usable trail."}
+              </Text>
+            </View>
           ))}
         </View>
-        <Footer />
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h2}>Question responses</Text>
-        <View style={styles.tableHeader}>
-          <Text style={{ width: "22%", color: "#fff", fontSize: 8 }}>Category</Text>
-          <Text style={{ width: "38%", color: "#fff", fontSize: 8 }}>Question</Text>
-          <Text style={{ width: "32%", color: "#fff", fontSize: 8 }}>Answer</Text>
-          <Text style={{ width: "8%", color: "#fff", fontSize: 8 }}>Score</Text>
-        </View>
-        {result.mcqRows.map((row) => (
-          <View key={row.questionId} style={[styles.tableRow, { backgroundColor: scoreFill(row.score) }]}>
-            <Text style={{ width: "22%", fontSize: 7 }}>{row.category}</Text>
-            <Text style={{ width: "38%", fontSize: 7 }}>{row.prompt}</Text>
-            <Text style={{ width: "32%", fontSize: 7 }}>{row.answerLabel}</Text>
-            <Text style={{ width: "8%", fontSize: 7 }}>{row.score}</Text>
-          </View>
-        ))}
-        <Footer />
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h2}>Priority gaps (indicative)</Text>
-        {result.gaps.map((g) => (
-          <View key={g.category} style={styles.card} wrap={false}>
-            <Text style={{ fontWeight: 700 }}>
-              {g.category} · {g.percent}% · {g.band}
-            </Text>
-            {g.insights.map((ins) => (
-              <Text key={ins} style={{ marginTop: 3 }}>
-                {ins}
-              </Text>
-            ))}
-            <Text style={{ marginTop: 4, fontSize: 8, color: "#64748B" }}>
-              Indicative hours/month: {g.indicativeHoursPerMonth} (headcount mid-point{" "}
-              {result.headcountMidpoint} × (1 − score/100) × 0.35)
-            </Text>
-          </View>
-        ))}
-        <View style={styles.card}>
-          <Text style={{ fontWeight: 700 }}>Indicative compliance risk: {result.complianceLevel}</Text>
-          <Text style={styles.muted}>
-            High if Payroll, Compliance & HR Data is below 40; Medium if below 60; otherwise Low.
+        <H2>Contents</H2>
+        <TocRow href="#exec" label="3  Executive summary" page={3} />
+        <TocRow href="#overall" label="4  Overall performance" page={4} />
+        <TocRow href="#deep1" label="5  Deep-dive — Hiring and Onboarding" page={5} />
+        <TocRow href="#deep3" label="6  Deep-dive — Attendance and Payroll" page={6} />
+        <TocRow href="#gaps" label="7  Gap analysis" page={7} />
+        <TocRow href="#impact" label="8  Indicative impact" page={8} />
+        <TocRow href="#solve" label="9  How Cerity People HRMS solves this" page={9} />
+        <TocRow href="#roadmap" label="10  Roadmap and next step" page={10} />
+        <TocRow href="#appendix" label="11  Appendix" page={11} />
+        <View
+          style={{
+            marginTop: 8,
+            backgroundColor: reportTheme.cream,
+            borderWidth: 1,
+            borderColor: reportTheme.gold,
+            padding: 8,
+          }}
+        >
+          <Text style={{ fontSize: 9, fontWeight: 700 }}>Methodology note</Text>
+          <Text style={{ fontSize: 8.5, marginTop: 4, lineHeight: 1.4 }}>
+            Four live categories, each 25% of the overall score. Hours-lost estimate uses workforce mid-point of the
+            selected size band × (1 − category score / 100) × 0.35 hours per person per month, summed across priority-gap
+            categories. Compliance band uses Payroll, Compliance & HR Data only. Print this report at 100% on A4.
           </Text>
         </View>
-        <Footer />
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h2}>What you told us</Text>
-        {result.quotedText.length === 0 ? (
-          <Text style={styles.muted}>No optional comments were provided.</Text>
-        ) : (
-          result.quotedText.map((q) => (
-            <View key={q.questionId} style={styles.card} wrap={false}>
-              <Text style={{ fontWeight: 700 }}>{q.category}</Text>
-              <Text style={styles.muted}>{q.prompt}</Text>
-              <Text style={{ marginTop: 4 }}>You told us: “{q.answer}”</Text>
+        <Text style={{ fontSize: 9, fontWeight: 700, marginTop: 8, marginBottom: 4 }}>What a question score means</Text>
+        <View wrap={false}>
+          <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+            <Cell width="14%" color="#fff" bold>
+              Points
+            </Cell>
+            <Cell width="22%" color="#fff" bold>
+              Status
+            </Cell>
+            <Cell width="64%" color="#fff" bold>
+              How to read it
+            </Cell>
+          </View>
+          {(
+            [
+              ["0", "Critical", "The process is missing, paper-only, or lives in personal inboxes."],
+              ["1–2", "Needs attention", "Work happens, but after the fact, with spreadsheets or chat."],
+              ["3", "Strong", "A joined-up tool with a trail someone else can follow."],
+            ] as const
+          ).map(([pts, status, how]) => (
+            <View
+              key={pts}
+              style={{
+                flexDirection: "row",
+                paddingVertical: 4,
+                borderBottomWidth: 1,
+                borderBottomColor: reportTheme.line,
+              }}
+            >
+              <Cell width="14%">{pts}</Cell>
+              <Cell width="22%">{status}</Cell>
+              <Cell width="64%">{how}</Cell>
             </View>
-          ))
-        )}
-        <Footer />
-      </Page>
+          ))}
+        </View>
+        <P>
+          Worked example for this report: overall {result.overall} is the mean of four category percentages (
+          {result.categories.map((c) => `${shortCat(c.category)} ${c.percent}`).join("; ")}). Text answers are quoted
+          later and never change that number.
+        </P>
+      </ReportPage>
 
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h2}>How we address these gaps</Text>
-        {result.gaps.map((g) =>
-          g.solvedBy.map((title) => {
-            const mod = moduleCopy(title);
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <View id="exec" />
+        <H2>Executive summary</H2>
+        <P>{verdict}</P>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
+          <StatTile label="Overall score" value={`${result.overall} / 100`} hint="Indicative" />
+          <StatTile label="Maturity band" value={`${bandStatus(result.overallBand)}`} hint={result.overallBand} />
+          <StatTile label="Weakest category" value={clipText(shortCat(weakest.category), 22)} hint={`${weakest.percent}`} />
+          <StatTile label="Strongest category" value={clipText(shortCat(strongest.category), 22)} hint={`${strongest.percent}`} />
+          <StatTile label="Critical categories" value={String(criticalCount)} hint="Score below 40" />
+          <StatTile
+            label="Hours / month"
+            value={String(result.indicativeHoursPerMonth)}
+            hint="Indicative, priority gaps"
+          />
+        </View>
+        <H2>{allStrong ? "Top 3 strengths to protect" : "Top 3 priority gaps"}</H2>
+        {top3.map((g, i) => (
+          <View
+            key={g.category}
+            wrap={false}
+            style={{
+              borderWidth: 1,
+              borderColor: reportTheme.line,
+              padding: 8,
+              marginBottom: 6,
+              backgroundColor: reportTheme.softWhite,
+            }}
+          >
+            <Text style={{ fontSize: 9, fontWeight: 700 }}>
+              {i + 1}. {g.category} · {g.percent}% · {bandStatus(g.band)}
+            </Text>
+            <Text style={{ fontSize: 8.5, marginTop: 3, lineHeight: 1.35 }}>
+              {allStrong
+                ? `Keep it up: ${g.category} is Optimized at ${g.percent}. Next-level: keep a live report so this trail stays visible to leaders.`
+                : g.insights[0]}
+            </Text>
+          </View>
+        ))}
+        <P>
+          Indicative compliance risk: {result.complianceLevel}. Workforce mid-point used: {result.headcountMidpoint}{" "}
+          people. HRMS today: {details.hrmsToday || "Not specified"}.
+        </P>
+        <Text style={{ fontSize: 9, fontWeight: 700, marginBottom: 4 }}>Category snapshot</Text>
+        <View wrap={false}>
+          <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+            <Cell width="40%" color="#fff" bold>
+              Category (25% of overall)
+            </Cell>
+            <Cell width="16%" color="#fff" bold>
+              Score
+            </Cell>
+            <Cell width="22%" color="#fff" bold>
+              Band
+            </Cell>
+            <Cell width="22%" color="#fff" bold>
+              Status
+            </Cell>
+          </View>
+          {result.categories.map((c) => (
+            <View
+              key={c.category}
+              wrap={false}
+              style={{
+                flexDirection: "row",
+                paddingVertical: 4,
+                borderBottomWidth: 1,
+                borderBottomColor: reportTheme.line,
+              }}
+            >
+              <Cell width="40%">{c.category}</Cell>
+              <Cell width="16%">{c.percent}</Cell>
+              <Cell width="22%">{c.band}</Cell>
+              <Cell width="22%">{bandStatus(c.band)}</Cell>
+            </View>
+          ))}
+        </View>
+        <P>
+          {allStrong
+            ? "This week: keep the trail current and add a leadership extract so Optimized scores stay visible."
+            : `This week: pick one owner for ${weakest.category}, freeze a single tracker, and bring that file to the consultation.`}
+        </P>
+      </ReportPage>
+
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <View id="overall" />
+        <H2>Overall performance</H2>
+        <FigureBlock
+          title="Figure 1: Radar of live assessment categories (scale 0–100)"
+          howToRead="Each axis is one category. The filled shape is your score. A small shape near the centre is Critical; a shape near the outer ring is Optimized. Ring labels are 25 / 50 / 75 / 100."
+        >
+          <RadarChart items={radarItems} />
+        </FigureBlock>
+        <FigureBlock
+          title="Figure 2: Category scores, lowest to highest (score 0–100)"
+          howToRead="Bar length is the category percentage. Colour and the status word show the band. The dashed line is the Developing threshold (60). Sort is weakest at the top."
+        >
+          <BarChartH items={sortedBars} />
+        </FigureBlock>
+        <P>
+          Interpretation: {weakest.category} is the lowest at {weakest.percent} ({bandStatus(weakest.band)}).{" "}
+          {strongest.category} is the highest at {strongest.percent} ({bandStatus(strongest.band)}).{" "}
+          {allStrong
+            ? "All categories sit in Optimized. Use the roadmap for next-level reporting rather than remedial rebuilds."
+            : "Close the lowest bar first; it drags overall score and indicative hours."}{" "}
+          Equal weights mean a 20-point lift in any one category moves overall by 5 points.
+        </P>
+        <View wrap={false}>
+          <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+            <Cell width="46%" color="#fff" bold>
+              Category
+            </Cell>
+            <Cell width="18%" color="#fff" bold>
+              Score / 100
+            </Cell>
+            <Cell width="18%" color="#fff" bold>
+              vs Developing 60
+            </Cell>
+            <Cell width="18%" color="#fff" bold>
+              Status
+            </Cell>
+          </View>
+          {ranked.map((c) => (
+            <View
+              key={c.category}
+              wrap={false}
+              style={{
+                flexDirection: "row",
+                paddingVertical: 4,
+                borderBottomWidth: 1,
+                borderBottomColor: reportTheme.line,
+              }}
+            >
+              <Cell width="46%">{c.category}</Cell>
+              <Cell width="18%">{c.percent}</Cell>
+              <Cell width="18%">{c.percent - 60 >= 0 ? `+${c.percent - 60}` : String(c.percent - 60)}</Cell>
+              <Cell width="18%">{bandStatus(c.band)}</Cell>
+            </View>
+          ))}
+        </View>
+      </ReportPage>
+
+      {[
+        [0, 1] as const,
+        [2, 3] as const,
+      ].map((pair) => (
+        <ReportPage key={pair.join("-")} logoSrc={logoSrc} company={company}>
+          <View id={deepIds[pair[0]]} />
+          <H2>Category deep-dives</H2>
+          {pair.map((ci) => {
+            const c = result.categories[ci];
+            if (!c) return null;
+            const rows = result.mcqRows.filter((r) => r.category === c.category);
+            const quote = result.quotedText.find((q) => q.category === c.category)?.answer ?? "";
+            const insightB = rows[1]?.gapInsight;
             return (
-              <View key={`${g.category}-${title}`} style={styles.card} wrap={false}>
-                <Text style={{ fontWeight: 700 }}>
-                  {g.category} → {mod.title}
+              <View key={c.category} wrap={false} style={{ marginBottom: 6 }}>
+                {ci === pair[1] ? <View id={deepIds[ci]} /> : null}
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <Text style={{ fontFamily: reportTheme.font.serif, fontSize: 11, maxWidth: 340 }}>{c.category}</Text>
+                  <Chip band={c.band} />
+                </View>
+                <Text style={{ fontSize: 7.5, color: reportTheme.muted, marginVertical: 2 }}>
+                  Score {c.percent} / 100 · {c.rawSum} of {c.mcqCount * 3} points · {bandStatus(c.band)}
                 </Text>
-                <Text style={{ marginTop: 3 }}>Before: {g.insights[0]}</Text>
-                <Text style={{ marginTop: 3 }}>After: {mod.description}</Text>
+                <FigureBlock
+                  compact
+                  title={`Figure ${3 + ci}: ${shortCat(c.category)} vs band thresholds (0–100)`}
+                  howToRead="Bar = category %. Dashed line = Developing (60). Status word is for grayscale."
+                >
+                  <BarChartH
+                    compact
+                    items={[{ label: shortCat(c.category), percent: c.percent, band: c.band }]}
+                    axisLabel="Category score (0–100)"
+                  />
+                </FigureBlock>
+                <McqTable rows={rows} />
+                <View
+                  style={{
+                    marginTop: 4,
+                    borderLeftWidth: 3,
+                    borderLeftColor: reportTheme.gold,
+                    backgroundColor: reportTheme.cream,
+                    padding: 5,
+                  }}
+                >
+                  <Text style={{ fontSize: 7.5, fontWeight: 700 }}>Your own words</Text>
+                  <Text
+                    style={{
+                      fontSize: 8,
+                      marginTop: 2,
+                      lineHeight: 1.3,
+                      fontFamily: [reportTheme.font.sans, reportTheme.font.fallback],
+                    }}
+                  >
+                    “{clipText(quote, 180)}”
+                  </Text>
+                </View>
+                <View style={{ marginTop: 4, padding: 5, backgroundColor: reportTheme.softWhite }}>
+                  <Text style={{ fontSize: 8, fontWeight: 700 }}>What this tells us</Text>
+                  <Text style={{ fontSize: 8, marginTop: 2, lineHeight: 1.3 }}>
+                    {rows[0]?.gapInsight ?? "No scored answers in this category."}
+                    {insightB && insightB !== rows[0]?.gapInsight ? ` ${insightB}` : ""} {riskLine(c.band)} Mapped
+                    module: {moduleCopy(rows[0]?.solvedBy ?? "Employee Management").title}.
+                  </Text>
+                </View>
               </View>
             );
-          }),
-        )}
-        <Footer />
-      </Page>
+          })}
+        </ReportPage>
+      ))}
 
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h2}>30 / 60 / 90 day sequence</Text>
-        <View style={styles.card}>
-          <Text style={{ fontWeight: 700 }}>First 30 days</Text>
-          <Text>
-            Confirm people master data, attendance, and payroll inputs for the lowest-scoring
-            categories. Agree owners and a single source of truth.
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <View id="gaps" />
+        <H2>Gap analysis</H2>
+        <FigureBlock
+          title="Figure 7: Heatmap of scored questions (category × MCQ)"
+          howToRead="Each cell is one scored question. 0 is Critical (red), 1–2 Needs attention (amber/blue), 3 is Strong (green). Read across a row to see whether both questions in a category are weak."
+        >
+          <Heatmap rows={heatRows} />
+        </FigureBlock>
+        <FigureBlock
+          title="Figure 8: Priority matrix (indicative impact vs remaining gap)"
+          howToRead="Vertical axis is indicative hours/month for that gap. Horizontal axis is remaining gap points (100 − score). Top-left is higher impact with less remaining work; top-right is a larger programme."
+        >
+          <PriorityMatrix points={matrixPoints} />
+        </FigureBlock>
+        <View wrap={false}>
+          <Text minPresenceAhead={40} style={{ fontSize: 9, fontWeight: 700, marginBottom: 4 }}>
+            Ranked priority gaps
           </Text>
+          <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+            <Text style={{ width: "8%", color: "#fff", fontSize: 7 }}>#</Text>
+            <Text style={{ width: "34%", color: "#fff", fontSize: 7 }}>Area</Text>
+            <Text style={{ width: "22%", color: "#fff", fontSize: 7 }}>Severity</Text>
+            <Text style={{ width: "36%", color: "#fff", fontSize: 7 }}>Indicative hours/mo</Text>
+          </View>
+          {result.gaps.map((g, i) => (
+            <View key={g.category} style={{ flexDirection: "row", paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: reportTheme.line }}>
+              <Text style={{ width: "8%", fontSize: 8 }}>{i + 1}</Text>
+              <Text style={{ width: "34%", fontSize: 8 }}>{g.category}</Text>
+              <Text style={{ width: "22%", fontSize: 8 }}>{bandStatus(g.band)}</Text>
+              <Text style={{ width: "36%", fontSize: 8 }}>{g.indicativeHoursPerMonth}</Text>
+            </View>
+          ))}
         </View>
-        <View style={styles.card}>
-          <Text style={{ fontWeight: 700 }}>By 60 days</Text>
-          <Text>
-            Stand up the mapped modules for your priority gaps so routine requests, leave, and
-            hiring stages leave email and spreadsheets.
-          </Text>
-        </View>
-        <View style={styles.card}>
-          <Text style={{ fontWeight: 700 }}>By 90 days</Text>
-          <Text>
-            Turn on reporting and self-service so leaders see headcount and attrition without waiting
-            on extracts, and HR is not the bottleneck for letters and balances.
-          </Text>
-        </View>
-        <Text style={styles.muted}>Generic sequencing for discussion — not a case study or guarantee.</Text>
-        <Footer />
-      </Page>
+      </ReportPage>
 
-      <Page size="A4" style={styles.page}>
-        <HeaderBar logoSrc={logoSrc} />
-        <Text style={styles.h1}>Book a working session</Text>
-        <Text style={{ marginTop: 10 }}>
-          Walk through this briefing with Cerity People. We will map the indicative gaps to a
-          practical sequence — no public pricing on this report.
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <View id="impact" />
+        <H2>Indicative impact</H2>
+        <P>
+          These figures are labelled Indicative. They are not a time-and-motion study. They use the published formula
+          from this report’s methodology, applied to your scores and size band.
+        </P>
+        <FigureBlock
+          title="Figure 9: Indicative hours/month by priority gap"
+          howToRead="Bar length is scaled to the largest gap in this report. The label shows indicative hours/month and the status word so the chart remains readable in grayscale."
+        >
+          <BarChartH
+            items={(() => {
+              const maxH = Math.max(1, ...result.gaps.map((g) => g.indicativeHoursPerMonth));
+              return result.gaps.map((g) => ({
+                label: shortCat(g.category),
+                percent: (g.indicativeHoursPerMonth / maxH) * 100,
+                band: g.band,
+                valueLabel: `${g.indicativeHoursPerMonth} h · ${bandStatus(g.band)}`,
+              }));
+            })()}
+            threshold={0}
+            axisLabel="Relative indicative hours (largest gap = 100 on this scale)"
+          />
+        </FigureBlock>
+        <View
+          wrap={false}
+          style={{
+            borderWidth: 1,
+            borderColor: reportTheme.gold,
+            backgroundColor: reportTheme.cream,
+            padding: 8,
+            marginTop: 6,
+          }}
+        >
+          <Text style={{ fontSize: 9, fontWeight: 700 }}>Formulas and assumptions</Text>
+          {INDICATIVE_ASSUMPTIONS.map((line) => (
+            <Text key={line} style={{ fontSize: 8, marginTop: 3, lineHeight: 1.35 }}>
+              • {line}
+            </Text>
+          ))}
+          <Text style={{ fontSize: 8, marginTop: 4 }}>
+            Worked example for this report: mid-point {result.headcountMidpoint} × (1 − category%/100) × 0.35, then
+            summed across {result.gaps.length} priority-gap categories = {result.indicativeHoursPerMonth} hours/month
+            (indicative). Compliance level = {result.complianceLevel}.
+          </Text>
+        </View>
+        <Text style={{ fontSize: 9, fontWeight: 700, marginTop: 6, marginBottom: 4 }}>
+          Worked hours by gap (indicative)
         </Text>
-        <View style={[styles.card, { marginTop: 16 }]}>
-          <Text>
-            Web:{" "}
-            <Link src={`${siteConfig.url}/contact`}>
-              {siteConfig.url.replace(/^https?:\/\//, "")}/contact
-            </Link>
-          </Text>
-          <Text style={{ marginTop: 4 }}>Email: {siteConfig.contact.email}</Text>
-          <Text style={{ marginTop: 4 }}>Phone: {siteConfig.contact.phone}</Text>
+        <View wrap={false}>
+          <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+            <Cell width="28%" color="#fff" bold>
+              Area
+            </Cell>
+            <Cell width="14%" color="#fff" bold>
+              Score
+            </Cell>
+            <Cell width="18%" color="#fff" bold>
+              1 − score/100
+            </Cell>
+            <Cell width="18%" color="#fff" bold>
+              Mid-point
+            </Cell>
+            <Cell width="22%" color="#fff" bold>
+              Hours / mo
+            </Cell>
+          </View>
+          {result.gaps.map((g) => {
+            const factor = Math.round((1 - g.percent / 100) * 100) / 100;
+            return (
+              <View
+                key={g.category}
+                wrap={false}
+                style={{
+                  flexDirection: "row",
+                  paddingVertical: 4,
+                  borderBottomWidth: 1,
+                  borderBottomColor: reportTheme.line,
+                }}
+              >
+                <Cell width="28%">{shortCat(g.category)}</Cell>
+                <Cell width="14%">{g.percent}</Cell>
+                <Cell width="18%">{factor}</Cell>
+                <Cell width="18%">{result.headcountMidpoint}</Cell>
+                <Cell width="22%">{g.indicativeHoursPerMonth}</Cell>
+              </View>
+            );
+          })}
         </View>
-        <Footer />
-      </Page>
+        <P>
+          {allStrong
+            ? "Hours are 0 because every live category is Optimized. Treat this page as a keep-it-up record: next-level work is reporting cadence, not a rebuild. Indicative compliance risk remains Low."
+            : `Error-prone processes to watch: ${ranked
+                .slice(0, 3)
+                .map((c) => c.category)
+                .join("; ")}. Indicative compliance risk: ${result.complianceLevel}.`}
+        </P>
+      </ReportPage>
+
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <View id="solve" />
+        <H2>How Cerity People HRMS solves this</H2>
+        <View wrap={false}>
+          <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+            <Text style={{ width: "22%", color: "#fff", fontSize: 7 }}>Gap</Text>
+            <Text style={{ width: "26%", color: "#fff", fontSize: 7 }}>What you told us</Text>
+            <Text style={{ width: "22%", color: "#fff", fontSize: 7 }}>Module</Text>
+            <Text style={{ width: "30%", color: "#fff", fontSize: 7 }}>What changes</Text>
+          </View>
+          {result.gaps.map((g) => {
+            const title = g.solvedBy[0] ?? "Employee Management";
+            const mod = moduleCopy(title);
+            return (
+              <View
+                key={g.category}
+                style={{ flexDirection: "row", paddingVertical: 4, borderBottomWidth: 1, borderBottomColor: reportTheme.line }}
+              >
+                <Text style={{ width: "22%", fontSize: 7.5 }}>{clipText(g.category, 40)}</Text>
+                <Text style={{ width: "26%", fontSize: 7.5 }}>{clipText(g.insights[0] ?? "", 70)}</Text>
+                <Text style={{ width: "22%", fontSize: 7.5 }}>{mod.title}</Text>
+                <Text style={{ width: "30%", fontSize: 7.5 }}>{clipText(mod.description, 80)}</Text>
+              </View>
+            );
+          })}
+        </View>
+        <Text style={{ fontSize: 9, fontWeight: 700, marginTop: 8, marginBottom: 4 }}>
+          Before vs after — top 3
+        </Text>
+        {top3.map((g) => {
+          const mod = moduleCopy(g.solvedBy[0] ?? "Employee Management");
+          return (
+            <BeforeAfter
+              key={g.category}
+              title={g.category}
+              today={g.insights[0] ?? "Manual process"}
+              withCerity={mod.description}
+            />
+          );
+        })}
+        <FigureBlock
+          title="Figure 10: Process flow — today vs joined-up modules"
+          howToRead="Boxes read left to right. The first row is the current hand-off pattern for the weakest category. The second uses only modules listed in the product catalogue."
+        >
+          <FlowDiagram title={`Today · ${shortCat(weakest.category)}`} steps={todayFlow(weakest.category)} />
+          <FlowDiagram
+            title="With Cerity People"
+            steps={automatedFlow(result.gaps.find((g) => g.category === weakest.category)?.solvedBy ?? [])}
+          />
+        </FigureBlock>
+      </ReportPage>
+
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <View id="roadmap" />
+        <H2>Recommended roadmap</H2>
+        <P>
+          Sequence follows your priority gaps. This is a discussion timeline, not a case study or a guaranteed go-live
+          date.
+        </P>
+        <FigureBlock
+          title="Figure 11: 30 / 60 / 90 day timeline"
+          howToRead="Milestones run left to right. Day 30 stabilises data for the weakest category; day 60 stands up the mapped module; day 90 adds reporting. Adjust with your team in the consultation."
+        >
+          <Timeline
+            milestones={[
+              {
+                day: "Day 30",
+                title: shortCat(weakest.category),
+                detail: "Single source of truth for inputs in the weakest category.",
+              },
+              {
+                day: "Day 60",
+                title: clipText(moduleCopy(top3[1]?.solvedBy[0] ?? top3[0]?.solvedBy[0] ?? "Onboarding").title, 18),
+                detail: "Stand up the mapped module so work leaves inboxes.",
+              },
+              {
+                day: "Day 90",
+                title: "HR Analytics",
+                detail: "Leaders see headcount without waiting on extracts.",
+              },
+            ]}
+          />
+        </FigureBlock>
+        <P>
+          Day 30: freeze owners and inputs for {weakest.category}. Day 60: turn on{" "}
+          {moduleCopy(top3[0]?.solvedBy[0] ?? "Employee Management").title}. Day 90: HR Analytics so leaders do not wait
+          on extracts. This timeline is a discussion sequence, not a guaranteed go-live.
+        </P>
+        <View id="next" />
+        <H2>Next step / Book an appointment</H2>
+        <View
+          wrap={false}
+          style={{
+            backgroundColor: reportTheme.navy,
+            padding: 10,
+            marginBottom: 8,
+          }}
+        >
+          <Text style={{ color: reportTheme.white, fontFamily: reportTheme.font.serif, fontSize: 14 }}>
+            Book a working session
+          </Text>
+          <Link src={contactUrl} style={{ color: reportTheme.gold, fontSize: 10, marginTop: 6 }}>
+            {contactUrl.replace(/^https?:\/\//, "")}
+          </Link>
+          <Text style={{ color: reportTheme.cream, fontSize: 9, marginTop: 4 }}>
+            {siteConfig.contact.email} · {siteConfig.contact.phone}
+          </Text>
+        </View>
+        <Text style={{ fontSize: 9, fontWeight: 700, marginBottom: 4 }}>What happens in the consultation</Text>
+        {[
+          "We replay your scorecard and confirm which gaps are operational versus policy.",
+          "We map those gaps to live Cerity People modules from the catalogue — not a custom invention.",
+          "You leave with a 30 / 60 / 90 discussion sequence. Fees are scoped afterwards, never in this PDF.",
+        ].map((step, i) => (
+          <View
+            key={step}
+            wrap={false}
+            style={{
+              flexDirection: "row",
+              marginBottom: 5,
+              borderWidth: 1,
+              borderColor: reportTheme.line,
+              padding: 6,
+            }}
+          >
+            <Text style={{ width: 16, fontFamily: reportTheme.font.serif, fontSize: 13, color: reportTheme.blue }}>
+              {i + 1}
+            </Text>
+            <Text style={{ flex: 1, fontSize: 9, lineHeight: 1.35 }}>{step}</Text>
+          </View>
+        ))}
+      </ReportPage>
+
+      <ReportPage logoSrc={logoSrc} company={company}>
+        <View id="appendix" />
+        <H2>Appendix: full answers, method, disclaimer</H2>
+        <View wrap={false}>
+          <View style={{ flexDirection: "row", backgroundColor: reportTheme.navy, padding: 4 }}>
+            <Cell width="20%" color="#fff" bold>
+              Category
+            </Cell>
+            <Cell width="36%" color="#fff" bold>
+              Question
+            </Cell>
+            <Cell width="26%" color="#fff" bold>
+              Answer
+            </Cell>
+            <Cell width="8%" color="#fff" bold>
+              Score
+            </Cell>
+            <Cell width="10%" color="#fff" bold>
+              Status
+            </Cell>
+          </View>
+        </View>
+        {result.mcqRows.map((r) => (
+          <View
+            key={r.questionId}
+            wrap={false}
+            style={{ flexDirection: "row", paddingVertical: 4, borderBottomWidth: 1, borderBottomColor: reportTheme.line }}
+          >
+            <Cell width="20%">{shortCat(r.category)}</Cell>
+            <Cell width="36%">{clipText(r.prompt, 80)}</Cell>
+            <Cell width="26%">{clipText(r.answerLabel, 60)}</Cell>
+            <Cell width="8%">{r.score}</Cell>
+            <Cell width="10%">{answerStatus(r.score)}</Cell>
+          </View>
+        ))}
+        <Text style={{ fontSize: 8.5, fontWeight: 700, marginTop: 8 }}>Text answers</Text>
+        {result.categories.map((c) => {
+          const q = result.quotedText.find((x) => x.category === c.category);
+          return (
+            <Text key={c.category} style={{ fontSize: 8, marginTop: 3, lineHeight: 1.35 }}>
+              {c.category}: “{clipText(q?.answer ?? "", 200)}”
+            </Text>
+          );
+        })}
+        <View
+          wrap={false}
+          style={{ marginTop: 8, padding: 8, backgroundColor: reportTheme.cream, borderWidth: 1, borderColor: reportTheme.gold }}
+        >
+          <Text style={{ fontSize: 8.5, fontWeight: 700 }}>Scoring bands</Text>
+          {MATURITY_BANDS.map((b) => (
+            <Text key={b.band} style={{ fontSize: 8, marginTop: 2 }}>
+              {b.band} / {bandStatus(b.band)}: {b.min}–{b.max}
+            </Text>
+          ))}
+          <Text style={{ fontSize: 8, marginTop: 6, lineHeight: 1.35 }}>
+            Disclaimer: {INDICATIVE_ASSUMPTIONS.join(" ")}
+          </Text>
+        </View>
+      </ReportPage>
     </Document>
   );
 }

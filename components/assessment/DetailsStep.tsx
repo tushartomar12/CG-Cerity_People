@@ -3,6 +3,7 @@ import {
   HRMS_TODAY_OPTIONS,
   type AssessmentDetails,
 } from "@/lib/assessment-data";
+import { CONSENT_LABEL } from "@/lib/validation";
 import { ProgressBar } from "./ProgressBar";
 
 type Props = {
@@ -12,6 +13,11 @@ type Props = {
   onBack: () => void;
   onNext: () => void;
   totalSteps: number;
+  consent: boolean;
+  consentError?: string;
+  onConsentChange: (value: boolean) => void;
+  website: string;
+  onWebsiteChange: (value: string) => void;
 };
 
 const fieldClass =
@@ -24,9 +30,14 @@ export function DetailsStep({
   onBack,
   onNext,
   totalSteps,
+  consent,
+  consentError,
+  onConsentChange,
+  website,
+  onWebsiteChange,
 }: Props) {
   return (
-    <div className="mx-auto max-w-2xl rounded-2xl border border-amber-200/50 bg-white/50 p-6 shadow-xl shadow-navy/5 backdrop-blur-xl sm:p-10">
+    <div className="relative mx-auto max-w-2xl rounded-2xl border border-amber-200/50 bg-white/50 p-6 shadow-xl shadow-navy/5 backdrop-blur-xl sm:p-10">
       <ProgressBar current={1} total={totalSteps} />
       <h2 className="font-serif text-3xl text-navy">Company details</h2>
       <p className="mt-2 text-sm text-slate-600">
@@ -119,6 +130,33 @@ export function DetailsStep({
           </Field>
         </div>
       </div>
+      <div className="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+        <label htmlFor="asmt-website">Website</label>
+        <input
+          id="asmt-website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => onWebsiteChange(e.target.value)}
+        />
+      </div>
+      <label className="mt-6 flex items-start gap-2 text-sm text-navy">
+        <input
+          type="checkbox"
+          className="mt-0.5 h-4 w-4 rounded border-slate-300"
+          checked={consent}
+          onChange={(e) => onConsentChange(e.target.checked)}
+        />
+        <span>
+          {CONSENT_LABEL}
+          <span className="text-red-500"> *</span>
+        </span>
+      </label>
+      {consentError ? (
+        <p className="mt-1 text-xs text-red-600" role="alert">
+          {consentError}
+        </p>
+      ) : null}
       <div className="mt-8 flex flex-wrap gap-3">
         <button
           type="button"

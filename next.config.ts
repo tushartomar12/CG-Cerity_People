@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverExternalPackages: ["@prisma/client", "prisma", "nodemailer"],
+  experimental: {
+    proxyClientMaxBodySize: "5mb",
+  },
 };
 
 export default nextConfig;
