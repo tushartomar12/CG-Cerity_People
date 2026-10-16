@@ -16,9 +16,9 @@ export const siteConfig = {
     businessHours: "Mon–Fri, 9:00 AM – 6:00 PM IST",
   },
   social: {
-    linkedin: "https://linkedin.com/company/ceritypeople",
+    linkedin: "https://www.linkedin.com/company/cerity-people",
     facebook: "https://facebook.com/ceritypeople",
-    instagram: "https://instagram.com/ceritypeople",
+    instagram: "https://www.instagram.com/ceritypeople",
     youtube: "https://youtube.com/@ceritypeople",
   },
   colors: {

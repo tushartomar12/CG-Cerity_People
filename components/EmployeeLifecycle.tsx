@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   Award,
@@ -197,7 +197,7 @@ const LABEL_LAYOUT = [
 ] as const;
 
 export function EmployeeLifecycle() {
-  const uid = useId();
+  const uid = "lifecycle";
   const [active, setActive] = useState(0);
   const stage = STAGES[active];
   const StageIcon = stage.icon;
