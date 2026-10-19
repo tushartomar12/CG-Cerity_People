@@ -66,13 +66,9 @@ export default function HomePage() {
         help your business grow.
       </p>
 
-      <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+      <div className="mt-9 flex justify-center">
         <ButtonLink href="/solutions" className="min-w-[200px] px-8 py-3.5">
           Explore HR Solutions
-        </ButtonLink>
-
-        <ButtonLink href="/contact" variant="outline" className="min-w-[200px] px-8 py-3.5">
-          Book a Consultation
         </ButtonLink>
       </div>
 
