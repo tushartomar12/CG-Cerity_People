@@ -9,7 +9,6 @@ import { ServiceCard } from "@/components/ServiceCard";
 import { TestimonialCard } from "@/components/TestimonialCard";
 import { TrustBar } from "@/components/TrustBar";
 import {
-  approachSteps,
   consultingServices,
   homeFaqs,
   testimonials,
@@ -141,25 +140,6 @@ export default function HomePage() {
               />
             ))}
           </div>
-        </div>
-      </section>
-
-       {/* How we work — compact strip */}
-      <section className="relative overflow-hidden border-y border-slate-200/80 py-12 sm:py-14">
-        <BrandBackground variant="default" />
-        <div className="container relative">
-          <p className="text-center text-lg font-semibold uppercase tracking-[0.2em] text-slate-500">
-            How we partner with you
-          </p>
-          <ol className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {approachSteps.map((step) => (
-              <li key={step.title} className="relative text-center sm:text-left">
-                <span className="text-2xl font-bold text-accent/90">{step.step}</span>
-                <h3 className="mt-2 font-semibold text-navy">{step.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{step.description}</p>
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
 
