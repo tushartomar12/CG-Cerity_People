@@ -49,13 +49,17 @@ export const assessmentPayloadSchema = z.object({
 export type AssessmentPayloadInput = z.infer<typeof assessmentPayloadSchema>;
 
 export const assessment0DetailsSchema = z.object({
+  name: z.string().trim().min(1, "Enter your name.").max(120),
   email: z.string().trim().email("Enter a valid work email.").max(254),
+  phone: z.string().trim().min(1, "Enter your WhatsApp number.").max(40),
   companySize: z.string().min(1, "Select company size.").pipe(sizeEnum),
   hrHeadcount: z
     .string()
     .trim()
-    .regex(/^\d+$/, "Enter a whole number."),
-  hrmsToday: z.string().min(1, "Select how you run HR today.").pipe(hrmsEnum),
+    .regex(/^\d*$/, "Enter a whole number.")
+    .optional()
+    .default(""),
+  hrmsToday: z.string().optional().default(""),
 });
 
 export const assessment0PayloadSchema = z
@@ -83,6 +87,13 @@ export const assessment0PayloadSchema = z
         code: "custom",
         path: ["answers", ASSESSMENT0_TEXT.id],
         message: `Keep this under ${HEADACHE_MAX} characters.`,
+      });
+    }
+    if (!data.consent) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["consent"],
+        message: "Consent is required.",
       });
     }
   });

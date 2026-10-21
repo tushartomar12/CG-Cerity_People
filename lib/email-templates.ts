@@ -294,10 +294,12 @@ export function assessment0SalesEmail(
     reason: "Internal notification of a quick HR check completed on the Cerity People website.",
     bodyHtml: `
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E2E8F0;margin-bottom:16px">
+        ${row("Name", details.name)}
         ${row("Email", details.email)}
+        ${row("WhatsApp", details.phone)}
         ${row("Size", details.companySize)}
-        ${row("HR headcount", details.hrHeadcount)}
-        ${row("HRMS today", details.hrmsToday)}
+        ${row("HR headcount", details.hrHeadcount || "—")}
+        ${row("HRMS today", details.hrmsToday || "—")}
         ${row("Overall score", `${result.overall} · ${result.overallBand}`)}
         ${row("Submitted", meta.submittedAt.toISOString())}
         ${row("Record id", meta.id)}

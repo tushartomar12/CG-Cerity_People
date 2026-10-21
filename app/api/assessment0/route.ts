@@ -52,13 +52,14 @@ export async function POST(request: Request) {
     row = await db.assessmentSubmission.create({
       data: {
         assessmentType: AssessmentType.QUICK,
-        name: null,
+        name: details.name,
         email: details.email,
+        phone: details.phone,
         company: "",
         companySize: details.companySize,
         industry: "",
-        hrHeadcount: details.hrHeadcount,
-        currentHrms: details.hrmsToday,
+        hrHeadcount: details.hrHeadcount || "0",
+        currentHrms: details.hrmsToday || "None",
         answers,
         categoryScores: result.categories,
         overallScore: Math.round(result.overall),

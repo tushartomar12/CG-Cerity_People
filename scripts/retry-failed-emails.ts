@@ -134,7 +134,9 @@ async function retryAssessments() {
     try {
       if (isQuick) {
         const details: Assessment0Details = {
+          name: row.name ?? "",
           email: row.email,
+          phone: row.phone ?? "",
           companySize: row.companySize,
           hrHeadcount: row.hrHeadcount,
           hrmsToday: row.currentHrms,
@@ -191,7 +193,9 @@ async function retryAssessments() {
   for (const row of quickUserFailed) {
     try {
       const details: Assessment0Details = {
+        name: row.name ?? "",
         email: row.email,
+        phone: row.phone ?? "",
         companySize: row.companySize,
         hrHeadcount: row.hrHeadcount,
         hrmsToday: row.currentHrms,

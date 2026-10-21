@@ -1,4 +1,3 @@
-import { BAND_COLORS } from "./assessment-data";
 import {
   ASSESSMENT0_CATEGORIES,
   ASSESSMENT0_MCQS,
@@ -86,5 +85,3 @@ export function scoreAssessment0(answers: AssessmentAnswers): Assessment0Result 
     quotedText,
   };
 }
-
-export { BAND_COLORS };

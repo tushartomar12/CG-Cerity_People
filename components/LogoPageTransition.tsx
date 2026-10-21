@@ -14,6 +14,15 @@ const MORPH_MS = 1050;
 
 type Phase = "intro" | "morph" | "done";
 
+function isAssessmentFocusPath(pathname: string): boolean {
+  return (
+    pathname === "/assessment0" ||
+    pathname.startsWith("/assessment0/") ||
+    pathname === "/assessment" ||
+    pathname.startsWith("/assessment/")
+  );
+}
+
 export function LogoPageTransition({
   brandAnchor,
   onTransitioning,
@@ -135,7 +144,25 @@ export function LogoPageTransition({
   };
 
   useEffect(() => {
-    if (!mounted || !brandAnchor) return;
+    if (!mounted) return;
+
+    if (isAssessmentFocusPath(pathname)) {
+      clearTimers();
+      onTransitioning(false);
+      document.body.style.overflow = "";
+      prevPath.current = pathname;
+      const hide = window.setTimeout(() => {
+        setVisible(false);
+        setPhase("done");
+      }, 0);
+      return () => window.clearTimeout(hide);
+    }
+
+    if (!brandAnchor) {
+      onTransitioning(false);
+      document.body.style.overflow = "";
+      return;
+    }
 
     const isInitial = prevPath.current === null;
     if (!isInitial && prevPath.current === pathname) return;
@@ -147,7 +174,7 @@ export function LogoPageTransition({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- pathname + anchor ready
   }, [pathname, mounted, brandAnchor]);
 
-  if (!mounted || !visible) return null;
+  if (!mounted || !visible || isAssessmentFocusPath(pathname)) return null;
 
   const markAnim =
     phase === "intro" ? (splashVariant === "full" ? "intro" : "nav") : false;
@@ -157,7 +184,7 @@ export function LogoPageTransition({
       <div
         className={cn(
           "fixed inset-0 z-[100] bg-white/95 backdrop-blur-sm transition-opacity duration-[900ms] ease-out",
-          phase === "morph" && "pointer-events-none",
+          (phase === "morph" || overlayOpacity === 0) && "pointer-events-none",
         )}
         style={{ opacity: overlayOpacity }}
         aria-hidden

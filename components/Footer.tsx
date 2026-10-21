@@ -59,6 +59,12 @@ const social = [
 export function Footer() {
   const pathname = usePathname();
   const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
+  const isAssessment0 =
+    pathname === "/assessment0" || pathname.startsWith("/assessment0/");
+
+  if (isAssessment0) {
+    return null;
+  }
 
   return (
     <footer

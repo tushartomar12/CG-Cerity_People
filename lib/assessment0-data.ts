@@ -103,14 +103,18 @@ export const ASSESSMENT0_TEXT = ASSESSMENT0_QUESTIONS.find(
 export const HEADACHE_MAX = 200;
 
 export type Assessment0Details = {
+  name: string;
   email: string;
+  phone: string;
   companySize: string;
   hrHeadcount: string;
   hrmsToday: string;
 };
 
 export const emptyAssessment0Details = (): Assessment0Details => ({
+  name: "",
   email: "",
+  phone: "",
   companySize: "",
   hrHeadcount: "",
   hrmsToday: "",

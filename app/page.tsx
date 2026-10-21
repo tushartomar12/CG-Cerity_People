@@ -18,6 +18,8 @@ import {
 import { siteConfig } from "@/lib/site-config";
 import { buildMetadata, faqSchema } from "@/lib/seo";
 
+/** Set true to show Customer stories on the home page. */
+const SHOW_HOME_TESTIMONIALS = false;
 
 export const metadata = buildMetadata({
   title: "HR Technology & HR Consulting",
@@ -143,22 +145,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="relative overflow-hidden section-padding border-t border-slate-100">
-        <BrandBackground variant="testimonials" />
-        <div className="container relative">
-          <SectionHeading
-            eyebrow="Customer stories"
-            title="Results leaders trust"
-            description={`Teams use ${siteConfig.name} to run payroll with confidence, hire faster, and give HR a strategic seat at the table.`}
-          />
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            {testimonials.map((t) => (
-              <TestimonialCard key={t.author} {...t} />
-            ))}
+      {SHOW_HOME_TESTIMONIALS ? (
+        <section className="relative overflow-hidden section-padding border-t border-slate-100">
+          <BrandBackground variant="testimonials" />
+          <div className="container relative">
+            <SectionHeading
+              eyebrow="Customer stories"
+              title="Results leaders trust"
+              description={`Teams use ${siteConfig.name} to run payroll with confidence, hire faster, and give HR a strategic seat at the table.`}
+            />
+            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+              {testimonials.map((t) => (
+                <TestimonialCard key={t.author} {...t} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       
       

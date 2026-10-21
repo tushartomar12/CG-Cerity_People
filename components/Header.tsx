@@ -73,7 +73,13 @@ export function Header() {
   }, [menuOpen]);
 
   const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
+  const isAssessment0 =
+    pathname === "/assessment0" || pathname.startsWith("/assessment0/");
   const motif = headerMotif(pathname);
+
+  if (isAssessment0) {
+    return <header className="hidden" aria-hidden="true" />;
+  }
 
   return (
     <header
