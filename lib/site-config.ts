@@ -4,9 +4,9 @@
 export const siteConfig = {
   name: "Cerity People",
   legalName: "Cerity People Technologies Pvt. Ltd.",
-  tagline: "HR Technology & Consulting",
+  tagline: "Digitally Enabled. Expertly Managed.",
   description:
-    "Modern HRMS, payroll, and HR consulting for growing businesses. Simplify HR operations, improve compliance, and scale your workforce.",
+    "Practical HR support and technology-driven solutions to help businesses manage people, streamline HR processes, and support growth.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ceritypeople.com",
   locale: "en_US",
   contact: {

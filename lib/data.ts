@@ -41,53 +41,224 @@ export const consultingServices = [
   { title: "HR Digital Transformation", description: "Move from manual HR to integrated automation." },
 ];
 
-export const whyChooseUs = [
+export const homeExpertServices = [
   {
-    title: "Technology + Human Expertise",
-    description: "Platform power backed by consultants who understand your context.",
+    title: "HR Administration",
+    description:
+      "Keep documentation, employee records, and routine administrative processes organized and audit-ready.",
   },
   {
-    title: "Scalable Solutions",
-    description: "Start simple and expand modules as your organization grows.",
+    title: "Responsive HR Support",
+    description:
+      "Get assistance from our HR team when questions or operational needs arise, helping you keep daily HR activities moving smoothly.",
   },
   {
-    title: "Compliance Focused",
-    description: "Built-in controls and advisory support for regulated environments.",
+    title: "Payroll Management",
+    description: "Accurate, timely, and fully controlled pay runs, every month.",
   },
   {
-    title: "Data-Driven Decisions",
-    description: "Analytics that help HR and leadership act with confidence.",
+    title: "Compliance Management",
+    description: "Stay ahead of labour laws, POSH requirements, statutory returns, and audits.",
   },
   {
-    title: "Automation First",
-    description: "Reduce repetitive work so teams focus on people and strategy.",
+    title: "Process Optimization",
+    description: "Remove delays and manual effort from HR workflows so teams work faster.",
+  },
+];
+
+export const homeWhyCerityPeople = [
+  {
+    title: "Technology Meets HR Expertise",
+    description:
+      "Bring technology and practical HR knowledge together to make everyday people processes more organized and manageable.",
   },
   {
-    title: "Dedicated Support",
-    description: "Implementation, training, and ongoing success partnership.",
+    title: "Support Across the Employee Journey",
+    description:
+      "From recruitment and onboarding to payroll and ongoing HR operations, access support across key stages of managing your team.",
+  },
+  {
+    title: "Processes That Grow With You",
+    description:
+      "Build a more structured approach to HR that can adapt as your business expands and your needs evolve.",
+  },
+  {
+    title: "A More Organized Way to Manage HR",
+    description:
+      "Keep essential HR tasks, documentation, and processes coordinated, helping reduce administrative complexity and maintain consistency.",
+  },
+];
+
+export const aboutWhyChooseUs = [
+  {
+    title: "One Partner, Complete HR",
+    description:
+      "Recruitment, onboarding, payroll, compliance and performance with one team.",
+  },
+  {
+    title: "Experts, Not Just Software",
+    description: "Real HR specialists stand behind every service.",
+  },
+  {
+    title: "Built for Your Stage",
+    description: "Start with the basics and add services whenever you need them.",
+  },
+  {
+    title: "Built to Keep You Audit-Ready",
+    description: "Labour law, POSH and statutory requirements managed with discipline.",
+  },
+  {
+    title: "Less Admin, More Impact",
+    description:
+      "Automation takes over routine work, so your team can focus on people and growth.",
+  },
+  {
+    title: "Support That Stays",
+    description: "We stay involved long after onboarding.",
+  },
+];
+
+export const aboutWhatWeAreBuilding = [
+  {
+    title: "Technology with a Purpose",
+    description:
+      "We use technology to simplify everyday HR work and reduce manual effort.",
+  },
+  {
+    title: "Human Expertise at the Core",
+    description:
+      "Technology can organize a process, but people bring context and judgment. Experienced HR professionals stay at the center of every meaningful decision.",
+  },
+  {
+    title: "One Connected Approach",
+    description:
+      "Instead of treating each HR activity as a separate task, we look at how people processes work together, so your operations stay consistent.",
+  },
+  {
+    title: "Practical Solutions, Not Unnecessary Complexity",
+    description: "We build solutions that fit your size, budget and stage of growth.",
+  },
+];
+
+export const aboutHowWeHelp = [
+  {
+    title: "Recruitment",
+    description:
+      "Build an organized hiring process, from defining roles and coordinating interviews to evaluating candidates and managing offers.",
+  },
+  {
+    title: "Onboarding & HR Operations",
+    description:
+      "Give new hires a smooth start, with clear processes for records, attendance, leave and day-to-day administration.",
+  },
+  {
+    title: "Payroll & Compensation",
+    description:
+      "Accurate, organized payroll and compensation administration, from monthly salaries to final settlements.",
+  },
+  {
+    title: "Compliance",
+    description:
+      "Labour law, POSH and statutory requirements managed with structure, so your records stay in order.",
+  },
+  {
+    title: "Performance",
+    description:
+      "Clear goals, feedback and review cycles that help leaders track progress and support improvement.",
+  },
+];
+
+export const aboutTrustItems = [
+  {
+    title: "Proven Experience",
+    description: "We draw on the expertise of Cerity Global.",
+  },
+  {
+    title: "Accuracy You Can Rely On",
+    description: "Every payroll run, offer letter and record gets careful checks.",
+  },
+  {
+    title: "Transparent Working",
+    description: "Clear timelines, clear responsibilities and no hidden surprises.",
+  },
+  {
+    title: "Confidentiality First",
+    description: "Employee and business data is handled with strict care and discretion.",
+  },
+  {
+    title: "Accountable Partnership",
+    description: "We take ownership of outcomes, not just tasks.",
+  },
+];
+
+export const aboutPrinciples = [
+  {
+    title: "Simplicity",
+    description: "We make complex HR activities easier to understand and manage.",
+  },
+  {
+    title: "Precision",
+    description: "We bring accuracy and attention to detail to every process.",
+  },
+  {
+    title: "Partnership",
+    description: "We listen first and work with you toward practical outcomes.",
+  },
+  {
+    title: "Innovation",
+    description:
+      "We keep finding better ways to combine technology, expertise, and efficient processes.",
+  },
+  {
+    title: "Integrity",
+    description:
+      "Transparency, responsibility, and respect for the people and information entrusted to us.",
+  },
+];
+
+export const aboutHowWeSucceed = [
+  {
+    title: "Listen first",
+    description: "We understand your business before we recommend anything.",
+  },
+  {
+    title: "Keep it practical",
+    description: "Solutions fit your size, budget and stage of growth.",
+  },
+  {
+    title: "Deliver consistently",
+    description: "Deadlines, deliverables and quality stay dependable month after month.",
+  },
+  {
+    title: "Improve continuously",
+    description: "We review results and refine processes as your needs change.",
   },
 ];
 
 export const approachSteps = [
   {
     step: "01",
-    title: "Understand",
-    description: "Assess your HR maturity, pain points, and business priorities.",
+    title: "Understand Your Needs",
+    description:
+      "We learn about your business, current HR processes, and priorities to understand where you need support.",
   },
   {
     step: "02",
-    title: "Design",
-    description: "Define the right mix of technology, process, and policy.",
+    title: "Build the Right Solution",
+    description:
+      "We identify the relevant HR services, tools, and processes that align with your business requirements.",
   },
   {
     step: "03",
-    title: "Implement",
-    description: "Configure platforms, migrate data, and train your teams.",
+    title: "Get Your Processes in Place",
+    description:
+      "We help organize the required workflows, documentation, and service arrangements for a smoother start.",
   },
   {
     step: "04",
-    title: "Optimize",
-    description: "Measure outcomes and continuously improve HR operations.",
+    title: "Support Your Ongoing Needs",
+    description:
+      "As your business evolves, we continue to support your HR operations in line with your changing requirements.",
   },
 ];
 
