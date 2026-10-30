@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { LogoTransitionProvider } from "@/components/LogoTransitionContext";
 import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/lib/site-config";
@@ -39,11 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col font-sans antialiased text-navy-deep">
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
-        <LogoTransitionProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </LogoTransitionProvider>
+        <LogoTransitionProvider>{children}</LogoTransitionProvider>
       </body>
     </html>
   );

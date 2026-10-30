@@ -34,7 +34,7 @@ export default function AboutPage() {
           { name: "About", path: "/about" },
         ])}
       />
-      <section className="relative -mt-16 overflow-hidden lg:-mt-[4.5rem]">
+      <section className="relative -mt-16 flex min-h-[100svh] flex-col overflow-hidden lg:-mt-[4.5rem]">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <img
             src="/brand-background.jpg"
@@ -42,13 +42,16 @@ export default function AboutPage() {
             className="h-full w-full object-cover object-center"
           />
         </div>
-        <div className="relative pt-16 lg:pt-[4.5rem]">
+        <div className="relative flex min-h-[100svh] flex-1 flex-col pt-16 lg:pt-[4.5rem]">
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "About Us" }]} />
-          <HeroSection
-            title="Technology Meets HR Expertise"
-            description="We combine HR technology, automation, consulting, and compliance expertise to help organizations build efficient and scalable HR operations — for startups, SMBs, and enterprises."
-            size="compact"
-          />
+          <div className="flex flex-1 items-center pb-28 sm:pb-36 lg:pb-44">
+            <HeroSection
+              className="w-full"
+              title="Technology Meets HR Expertise"
+              description="We combine HR technology, automation, consulting, and compliance expertise to help organizations build efficient and scalable HR operations — for startups, SMBs, and enterprises."
+              size="display"
+            />
+          </div>
         </div>
       </section>
 

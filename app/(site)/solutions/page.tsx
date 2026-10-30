@@ -283,16 +283,6 @@ export default function SolutionsPage() {
         PRICING AREA
     ======================================================= */}
     <div className="mt-14 md:mt-20">
-
-      {/* Small switch-style heading */}
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-
-        <div>
-        </div>
-
-      </div>
-
-
       {/* =====================================================
           PLAN GRID
       ===================================================== */}

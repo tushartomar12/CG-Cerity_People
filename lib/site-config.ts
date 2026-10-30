@@ -12,14 +12,11 @@ export const siteConfig = {
   contact: {
     email: "hello@ceritypeople.com",
     phone: "+91 80 1234 5678",
-    address: "Level 12, Tech Park Tower, Bengaluru, Karnataka 560001, India",
+    address: "A-17, A Block, Sector 16, Noida, Uttar Pradesh 201301",
     businessHours: "Mon–Fri, 9:00 AM – 6:00 PM IST",
   },
   social: {
     linkedin: "https://www.linkedin.com/company/cerity-people",
-    facebook: "https://facebook.com/ceritypeople",
-    instagram: "https://www.instagram.com/ceritypeople",
-    youtube: "https://youtube.com/@ceritypeople",
   },
   colors: {
     primary: "#1677E8",

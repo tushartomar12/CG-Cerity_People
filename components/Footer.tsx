@@ -5,12 +5,7 @@ import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
-import {
-  IconFacebook,
-  IconInstagram,
-  IconLinkedIn,
-  IconYouTube,
-} from "./SocialIcons";
+import { IconLinkedIn } from "./SocialIcons";
 
 const footerColumns = [
   {
@@ -41,19 +36,10 @@ const footerColumns = [
       { label: "Digital Transformation", href: "/consulting" },
     ],
   },
-  {
-    title: "Resources",
-    links: [
-      { label: "Guides", href: "/insights" },
-    ],
-  },
 ];
 
 const social = [
   { href: siteConfig.social.linkedin, label: "LinkedIn", icon: IconLinkedIn },
-  { href: siteConfig.social.facebook, label: "Facebook", icon: IconFacebook },
-  { href: siteConfig.social.instagram, label: "Instagram", icon: IconInstagram },
-  { href: siteConfig.social.youtube, label: "YouTube", icon: IconYouTube },
 ];
 
 export function Footer() {
@@ -106,7 +92,7 @@ export function Footer() {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-8">
             {footerColumns.map((col) => (
               <div key={col.title}>
                 <h3 className={cn("text-sm font-semibold", isContact ? "text-white" : "text-navy")}>
@@ -175,7 +161,7 @@ export function Footer() {
           </div>
         </div>
         <p className={cn("mt-8 text-center text-sm", isContact ? "text-white/70" : "text-slate-500")}>
-          Copyright © {new Date().getFullYear()} {siteConfig.legalName}. All rights reserved.
+          Copyright © {new Date().getFullYear()} {siteConfig.legalName} All rights reserved.
         </p>
       </div>
     </footer>

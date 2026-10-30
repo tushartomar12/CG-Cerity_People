@@ -1,14 +1,13 @@
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { ButtonLink } from "@/components/ButtonLink";
 import { HeroSection } from "@/components/HeroSection";
-import { InsightsExplorer } from "@/components/InsightsExplorer";
 import { JsonLd } from "@/components/JsonLd";
-import { blogPosts } from "@/lib/data";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "HR Insights & Resources",
   description:
-    "Guides and articles on HR technology, payroll, compliance, recruitment, and workforce management.",
+    "Guides and articles from Cerity People will be published here. In the meantime, talk with our team about your HR needs.",
   path: "/insights",
   keywords: ["HR Technology", "HRMS Software", "HR Compliance Consulting", "HR Automation"],
 });
@@ -25,14 +24,11 @@ export default function InsightsPage() {
       <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Insights" }]} />
       <HeroSection
         title="HR Insights, Guides & Resources"
-        description="Practical content for HR leaders and founders — structured for easy CMS or API integration later."
+        description="This section is being prepared. For practical help with HR technology, payroll, or consulting, get in touch with our team."
         size="compact"
-      />
-      <section className="relative overflow-hidden pb-20 pt-4">
-        <div className="container relative">
-          <InsightsExplorer posts={blogPosts} />
-        </div>
-      </section>
+      >
+        <ButtonLink href="/contact">Contact us</ButtonLink>
+      </HeroSection>
     </>
   );
 }
